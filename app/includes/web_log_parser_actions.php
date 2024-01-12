@@ -1,7 +1,9 @@
-/*
-  MIT License
+<?php
 
-  Copyright (c) 2023-2024 Golovanov Grigoriy
+/**
+ * MIT License
+
+  Copyright (c) 2023 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -24,3 +26,42 @@
   SOFTWARE.
 
  */
+
+
+
+$aActionsFlag = [
+    'UPDATE_BY_LAST_DATE',
+    'UPDATE_BY_DATE',
+    'UPDATE_BY_SQL_ID'
+];
+
+
+if (!isset($argv[2]) or (!in_array($argv[2], $aActionsFlag))) {
+    print "\nError: please set action flag!\n";
+    print "\nallow actions: \n\n";
+    print "    UPDATE_BY_LAST_DATE\n";
+    print "    UPDATE_BY_DATE\n";
+    print "    UPDATE_BY_SQL_ID\n\n";
+    exit;
+}
+
+// Return SQLID by flag action
+switch ($argv[2]) {
+    case 'UPDATE_BY_DATE':
+	//Get SQL ID by date
+	$sSQLID = $oWebLogParser->fGetLastSQL_ID($oWebLogParser->fVariablesGet('date_sql_short'));
+	break;
+    case 'UPDATE_BY_LAST_DATE':
+	//Get last SQL ID
+	$sSQLID=$oWebLogParser->fGetLastSQL_ID();
+	break;
+    case 'UPDATE_BY_SQL_ID':
+	// Update SQL by ID
+	if (!preg_match("/^\d+$/", $argv[3])) {
+	    print "\nError: please set SQL id!\n";
+	    exit;
+	} else {
+	    $sSQLID=trim($argv[2]);
+	}
+	break;
+}

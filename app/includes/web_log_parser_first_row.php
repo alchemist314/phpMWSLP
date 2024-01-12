@@ -1,7 +1,10 @@
-/*
-  MIT License
+<?php
 
-  Copyright (c) 2023-2024 Golovanov Grigoriy
+
+/**
+ * MIT License
+
+  Copyright (c) 2023 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -24,3 +27,20 @@
   SOFTWARE.
 
  */
+
+
+include "web_log_parser_header.php";
+
+// Get last Sql ID
+$sSQLID=$oWebLogParser->fGetLastSQL_ID();
+// Get date by ID
+$sDateByID=$oWebLogParser->fGetDateByID($sSQLID);
+if ($sDateByID==$sDate) {
+    $sErrorMsg = "Error: check dates! \n";
+    $sErrorMsg .="Date from DB ($sDateByID) equal input date ($sDate)! \n";
+    print $sErrorMsg;
+    exit;
+} else {
+    // Create first SQL row
+    $oWebLogParser->fInsertToSQL();
+}

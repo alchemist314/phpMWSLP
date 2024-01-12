@@ -1,0 +1,97 @@
+/* strength of planets */
+
+.c3-region.current_month {
+    fill: orange;
+    font-size:20px;
+    color:orange;
+}
+
+/* planets */
+
+.c3-region.ari {
+    fill: red;
+}
+.c3-region.tau {
+    fill: green;
+}
+.c3-region.gem {
+    fill: dark-blue;
+}
+.c3-region.cnc {
+    fill: blue;
+}
+.c3-region.leo {
+    fill: red;
+}
+.c3-region.vir {
+    fill: green;
+}
+.c3-region.lib {
+    fill: dark-blue;
+}
+.c3-region.sco {
+    fill: blue;
+}
+.c3-region.sgr {
+    fill: red;
+}
+.c3-region.cap {
+    fill: green;
+}
+.c3-region.aqr {
+    fill: dark-blue;
+}
+.c3-region.psc {
+    fill: blue;
+}
+
+.c3-region.sun {
+    fill: orange;
+    font-size:20px;
+    color:orange;
+}
+.c3-region.moon {
+    fill: #bdc206;
+    font-size:20px;
+    color:#bdc206;
+}
+.c3-region.mercury {
+    fill: #033135;
+    font-size:20px;
+    color:#033135;
+}
+.c3-region.venus {
+    fill: #0ca825;
+    font-size:20px;
+    color:#0ca825;
+}
+.c3-region.mars {
+    fill: #db3333;
+    font-size:20px;
+    color:#db3333;
+}
+.c3-region.jupiter {
+    fill: #686f02;
+    font-size:20px;
+    color:#686f02;
+}
+.c3-region.saturn {
+    fill: #43026f;
+    font-size:20px;
+    color:#43026f;
+}
+.c3-region.uran {
+    fill: #9b5200;
+    font-size:20px;
+    color:#9b5200;
+}
+.c3-region.neptun {
+    fill: #000dff;
+    font-size:20px;
+    color:#000dff;
+}
+.c3-region.pluton {
+    fill: #026f6b;
+    font-size:20px;
+    color:#026f6b;
+}
