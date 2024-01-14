@@ -9,8 +9,8 @@ date_default_timezone_set("Europe/Moscow");
 
 define('PHP_MWSLP_STORAGE', 'SQLITE');
 
-define('PHP_MWSLP_ROOT', '/var/www/html/git/web_stat_tmp/app');
-define('PHP_MWSLP_HTTP', 'https://192.168.1.3/web_stat');
+define('PHP_MWSLP_ROOT', '/var/www/html/git/phpMWSLP/app');
+define('PHP_MWSLP_HTTP', 'https://192.168.1.3/git/phpMWSLP/public');
 
 define('PHP_MWSLP_GEO_DB', '/usr/share/GeoIP/GeoLite2-City.mmdb');
 

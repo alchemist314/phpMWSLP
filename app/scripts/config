@@ -1,5 +1,5 @@
-log_date=05.01.2024
+log_date=06.01.2024
 log_path=/dist/STAT/01.24
-log_prefix=ssl.astro-online.ru.access.log
-log_tmp=/var/www/html/git/web_stat_tmp/app/tmp
-log_tmp_parts=/var/www/html/git/web_stat_tmp/app/tmp/parts
+log_prefix=access.log
+log_tmp=/var/www/html/git/phpMWSLP/app/tmp
+log_tmp_parts=/var/www/html/git/phpMWSLP/app/tmp/parts

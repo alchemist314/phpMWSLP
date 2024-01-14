@@ -31,16 +31,20 @@
 
 include "web_log_parser_header.php";
 
-// Get last Sql ID
+// Get last SQL ID
 $sSQLID=$oWebLogParser->fGetLastSQL_ID();
-// Get date by ID
-$sDateByID=$oWebLogParser->fGetDateByID($sSQLID);
-if ($sDateByID==$sDate) {
-    $sErrorMsg = "Error: check dates! \n";
-    $sErrorMsg .="Date from DB ($sDateByID) equal input date ($sDate)! \n";
-    print $sErrorMsg;
-    exit;
+if (!empty($sSQLID)) {
+    // Get date by ID
+    $sDateByID=$oWebLogParser->fGetDateByID($sSQLID);
+    if ($sDateByID==$sDate) {
+	$sErrorMsg = "Error: check dates! \n";
+	$sErrorMsg .="Date from DB ($sDateByID) equal input date ($sDate)! \n";
+	print $sErrorMsg;
+	exit;
+    } else {
+	// Create first SQL row
+	$oWebLogParser->fInsertToSQL();
+    }
 } else {
-    // Create first SQL row
     $oWebLogParser->fInsertToSQL();
 }

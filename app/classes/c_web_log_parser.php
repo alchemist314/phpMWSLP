@@ -3,7 +3,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023 Golovanov Grigoriy
+  Copyright (c) 2023-2024 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -738,15 +738,16 @@ class cWebLogParser extends cWebLogCommon {
                     `search_sys`,
                     `query_top100`,
                     `referal_top100`,
+                    `request_exclude_known`,
                     `os`,
                     `display_top100`,
                     `countries`,
                     `countries_id`,
                     `cities`,
-                    `sdate`,
                     `10min_traffic`,
                     `windows_version`,
-                    `social`)
+                    `social`,
+                    `sdate`)
                 VALUES  (
                     '0',
                     '0',
@@ -758,12 +759,13 @@ class cWebLogParser extends cWebLogCommon {
                     '0',
                     '0',
                     '0',
-                    '" . $this->fVariablesGet('date_sql') . "',
-                    '',
-                    '',
-                    ''
+                    '0',
+                    '0',
+                    '0',
+                    '0',
+                    '" . $this->fVariablesGet('date_sql') . "'
                 );";
-        print $sQuery . "\n";
+    	    ($this->fVariablesGet('show_sql_query') == true) ? print $sQuery . "\n" : "";
         try {
             $this->oPDO->query($sQuery);
         } catch (PDOException $e) {
