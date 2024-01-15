@@ -160,7 +160,7 @@ Now that the logs are done, you can setup the program:
           <li>module_countries // Countries statistics</li>
         </ul>
         
-     The module described below is excluded from processing by default, since it is the most resource-intensive and is processed by a separate multi-threaded (multi-processor) script:
+     The module described above is excluded from processing by default, since it is the most resource-intensive and is processed by a separate multi-threaded (multi-processor) script:
 
         6. Run the file `app/scripts/parse_to_file.sh`
         (this script will launch 4 background processing threads for collecting Cities and Countries)
