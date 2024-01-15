@@ -141,7 +141,7 @@ Now that the logs are done, you can setup the program:
           <li>module_all_referal_links // All referral links</li>
           <li>module_all_requests // All requests to the web server</li>
           <li>module_all_referal_links_exclude_known // All referrals from sources excluding known ones</li>
-          <li>module_search_engines_google  Transitions from google</li>
+          <li>module_search_engines_google //All requests from google</li>
           <li>module_status_404_requests // All requests with status 404</li>
           <li>module_status_200_requests // All requests with status 200</li>
          </ul>
