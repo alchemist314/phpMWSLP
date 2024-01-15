@@ -298,10 +298,13 @@ class cWebLogChart extends cWebLogCommon {
 
         $sLineChart = "var " . $sModuleName . "_line = c3.generate({
                 bindto: '#" . $sModuleName . "_line',
-                data: {
-                onmouseover :  fMouseOverLine,
-                        x : 'x',
-                        //xFormat : '%d.%m.%Y',
+                data: {";
+
+        if (PHP_MWSLP_CHART_YGRID_LINE) {
+            $sLineChart .= "onmouseover :  fMouseOverLine,";
+        }
+
+        $sLineChart .= "x : 'x',
                         columns: [
                         ";
 
@@ -370,10 +373,14 @@ class cWebLogChart extends cWebLogCommon {
 
         $sBarChart = "var " . $sModuleName . "_bar = c3.generate({
                 bindto: '#" . $sModuleName . "_bar',
-                data: {
-                onmouseover :  fMouseOverBar,
-                        x : 'x',
-                        //xFormat : '%d.%m.%Y',
+                data: {";
+
+        if (PHP_MWSLP_CHART_YGRID_LINE) {
+            $sBarChart .= "onmouseover :  fMouseOverBar,";
+        }
+
+        $sBarChart .= "
+    			x : 'x',
                         columns: [
                         ";
 

@@ -3,7 +3,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023 Golovanov Grigoriy
+  Copyright (c) 2023-2024 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -44,26 +44,18 @@ foreach($aConfigFile as $sStr) {
     $aConfig[$aSplitString[0]]=str_replace(["\r", "\n", "\"", "'"], "", $aSplitString[1]);
 }
 
-// If sDate is set script will calculate only string contain this date
-//$sDate="20.12.2023";
+// If sDate is set script will collect only string contain this date
 $sDate=$aConfig['log_date'];
 $oWebLogParser = new cWebLogParser($sDate);
-//exit;
 
 // Show output
-$oWebLogParser->fVariablesSet('show_module_output', true);
-
-// If 'show_sql_query'==true SQL query will displayed
-$oWebLogParser->fVariablesSet('show_sql_query', true);
-
-// If 'show_module_counter'==true you will see counter line for log file
-//$oWebLogParser->fVariablesSet('show_module_counter', true);
-
+$oWebLogParser->fVariablesSet('show_module_output', PHP_MWSLP_SHOW_MODULE_OUTPUT);
+// If true SQL query will displayed
+$oWebLogParser->fVariablesSet('show_sql_query', PHP_MWSLP_SHOW_SQL_QUERY);
+// If true you will see counter for every log line
+$oWebLogParser->fVariablesSet('show_module_counter', PHP_MWSLP_SHOW_LINE_COUNTER);
 // URL length for output
-$oWebLogParser->fVariablesSet('url_length', 100);
-
-// If 'gzip'==true a file will reading from gz archive
-//$oWebLogParser->fVariablesSet('gzip', false);
-//$oWebLogParser->fVariablesSet('gzip', true);
-
+$oWebLogParser->fVariablesSet('url_length', PHP_MWSLP_URL_LENGTH);
+// If true the log file will reading from gz archive
+$oWebLogParser->fVariablesSet('gzip', PHP_MWSLP_LOG_IS_GZIP);
 
