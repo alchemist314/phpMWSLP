@@ -149,7 +149,7 @@ Now that the logs are done, you can setup the program:
       * The "2" thread will collect the following information:
           <br>(modules_core2)
           <ul>
-           <li>module_10min_online_users_count // number of online every 10 minutes</li>
+           <li>module_10min_online_users_count // number of online user every 10 minutes</li>
           </ul>
           
       * The "3" thread will collect the following information:
