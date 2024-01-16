@@ -71,7 +71,7 @@ TP/1.0" 200 49 "https://192.168.1.1/test.html" "Mozilla/5.0 (Linux; arm_64; Andr
 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.5.95.00 SA/3 Mobile Safari/53
 7.36"  "192.168.1.2"
 ```
-For collection more information like display resolutions and referal links you should put code below to your site root directory:
+For collection more information like display resolutions and referal links you should put code below to pages on your site:
 
 ```
 <script type="text/javascript">
