@@ -46,10 +46,8 @@ module_day_online_users_count:
 <br><img src="https://raw.githubusercontent.com/alchemist314/images/main/phpMWSLP/traffic.png">
 module_windows_versions:
 <br><img src="https://raw.githubusercontent.com/alchemist314/images/main/phpMWSLP/windows_version.png">
-module_device_type:
-<br><img src="https://raw.githubusercontent.com/alchemist314/images/main/phpMWSLP/os_type.png">
-module_10min_online_users_count:
-<br><img src="https://raw.githubusercontent.com/alchemist314/images/main/phpMWSLP/traffic_one_day.png">
+module_device_type, module_10min_online_users_count:
+<br><img src="https://raw.githubusercontent.com/alchemist314/images/main/phpMWSLP/os_and_traffic.png"> 
 
 ### Configuration
 
