@@ -174,7 +174,7 @@ class cWebLogParser extends cWebLogCommon {
              * 
              *  Sofisticated case:
              * 
-             *  192.168.1.2 - - [11/Oct/2023:03:34:02 +0300] "GET /hit?c=1;r;s393*873*24;uhttps%3A//192.168.1.1/;0.14488124259292512 HTTP/1.0" 200 49 "https://192.168.1.1/test.html" "Mozilla/5.0 (Linux; arm_64; Android 13; 21081111RG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.5.95.00 SA/3 Mobile Safari/537.36"  "192.168.1.2"
+             *  192.168.1.2 - - [11/Oct/2023:03:34:02 +0300] "GET /stat?s=1;x;x393x873x24;xhttps%3A//192.168.1.1/ HTTP/1.0" 200 49 "https://192.168.1.1/test.html" "Mozilla/5.0 (Linux; arm_64; Android 13; 21081111RG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.5.95.00 SA/3 Mobile Safari/537.36"  "192.168.1.2"
              * 
              *  Ordinary case:
              * 
@@ -188,7 +188,7 @@ class cWebLogParser extends cWebLogCommon {
              *  -                        =  -
              *  remote_user              =  -
              *  [$time_local]            = [11/Oct/2023:03:34:02 +0300]
-             *  "$request"               = "GET /hit?c=1;r;s393*873*24;uhttps%3A//192.168.1.1/;0.14488124259292512 HTTP/1.0"
+             *  "$request"               = "GET /stat?s=1;x;x393x873x24;xhttps%3A//192.168.1.1/ HTTP/1.0"
              *  $status                  = 200
              *  $body_bytes_sent         = 49
              *  "$http_referer"          = "https://192.168.1.1/test.html"
@@ -208,7 +208,7 @@ class cWebLogParser extends cWebLogCommon {
                  *  $aSplittedString[4]  =
                  *  $aSplittedString[5]  = +0300]
                  *  $aSplittedString[6]  = "GET
-                 *  $aSplittedString[7]  = /hit?c=1;r;s393*873*24;uhttps%3A//192.168.1.1/;0.14488124259292512
+                 *  $aSplittedString[7]  = /stat?s=1;x;x393x873x24;xhttps%3A//192.168.1.1/
                  *  $aSplittedString[8]  = HTTP/1.0"
                  *  $aSplittedString[9]  = 200
                  *  $aSplittedString[10] = 49
@@ -241,7 +241,7 @@ class cWebLogParser extends cWebLogCommon {
 
                   [1] => Array
                   (
-                  [0] => GET /hit?c=1;rhttps://192.168.1.1/index.php;s393*873*24;uhttps://192.168.1.1/test.html;0.16584929630581557 HTTP/1.0
+                  [0] => GET /stat?s=1;xhttps://192.168.1.1/index.php;x393x873x24;xhttps://192.168.1.1/test.html HTTP/1.0
                   [1] => https://192.168.1./test.html
                   [2] => Mozilla/5.0 (Linux; arm_64; Android 13; 21081111RG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.5.95.00 SA/3 Mobile Safari/537.36
                   [3] => 192.168.1.2
@@ -261,7 +261,7 @@ class cWebLogParser extends cWebLogCommon {
 
                 preg_match_all('/"(.*?)"/', $sStr, $aMatches);
 
-                if (preg_match("/hit\?c=1/", $sStr)) {
+                if (preg_match("/stat\?s=1/", $sStr)) {
                     $sReferalFlag = "sofisticated";
 
                     /*
@@ -269,11 +269,10 @@ class cWebLogParser extends cWebLogCommon {
 
                       Array
                       (
-                      [0] /hit?c=1;
-                      [1] rhttps://192.168.1.1/index.php;
-                      [2] s393*873*24;
-                      [3] uhttps://192.168.1.1/test.html;
-                      [4] 0.16584929630581557
+                      [0] /stat?s=1;
+                      [1] xhttps://192.168.1.1/index.php;
+                      [2] x393x873x24;
+                      [3] xhttps://192.168.1.1/test.html;
                       )
                      */
                     $aRequestArray = explode(";", $aSplittedString[7]);
@@ -469,11 +468,10 @@ class cWebLogParser extends cWebLogCommon {
 
               Array
               (
-              [0] /hit?c=1;
-              [1] rhttps://192.168.1.1/index.php;
-              [2] s393*873*24;
+              [0] /stat?s=1;
+              [1] xhttps://192.168.1.1/index.php;
+              [2] x393x873x24;
               [3] uhttps://192.168.1.1/test.html;
-              [4] 0.16584929630581557
               )
              */
 
