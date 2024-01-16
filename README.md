@@ -74,26 +74,35 @@ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.5.95.00 S
 Now that the logs are done, you can setup the program:
 
 1. Edit the file `app/config/config.php`:
-   * set the path to the root directory (app) `PHP_MWSLP_ROOT`
-   * set the name of the SQLite database `PHP_MWSLP_PDO_TABLENAME`
-   * set the path to the GeoIP database GeoLite2-City.mmdb `PHP_MWSLP_GEO_DB`
-   * set the URL to the public folder `PHP_MWSLP_HTTP`
+   * Set the path to the root directory (app) `PHP_MWSLP_ROOT`
+   * Set the name of the SQLite database `PHP_MWSLP_PDO_TABLENAME`
+   * Set the path to the GeoIP database GeoLite2-City.mmdb `PHP_MWSLP_GEO_DB`
+   * Set the URL to the public folder `PHP_MWSLP_HTTP`
+  
+   Additionally, you can enable the following variables:
+   
+   * Show module output (false/true) `PHP_MWSLP_SHOW_MODULE_OUTPUT`
+   * Show SQL query (false/true) `PHP_MWSLP_SHOW_SQL_QUERY`
+   * Show line counter (false/true) `PHP_MWSLP_SHOW_LINE_COUNTER`
+   * URL length for output `PHP_MWSLP_URL_LENGTH`
+   * Read the log file from gz archive (false/true) `PHP_MWSLP_LOG_IS_GZIP`
+   * Show horizontal line on the chart (false/true) `PHP_MWSLP_CHART_YGRID_LINE`
 
-2. Edit the file `app/scripts/config`:
-  * set the date for which the log will be processed:
-    <br>`log_date=01/05/2024`
-  * set the directory where the web server logs are stored:
+3. Edit the file `app/scripts/config`:
+  * Set the date for which the log will be processed:
+    <br>`log_date=01.05.2024`
+  * Set the directory where the web server logs are stored:
     <br>`log_path=/dist/STAT/01.24`
-  * set the name (prefix) of the first part of the log files:
+  * Set the name (prefix) of the first part of the log files:
     <br>`log_prefix=access.log`
     <br>(the `/dist/STAT/01.24/` folder should contain web server log files, for example:
      <br>`access.log-20240101.gz`
      <br>`access.log-20240102.gz`
      <br>`access.log-20240103.gz`
      <br>`access.log-20240104.gz`)
-  * set the folder where manipulations with logs will be made:
+  * Set the folder where manipulations with logs will be made:
     <br>`log_tmp=/var/www/html/git/web_stat_tmp/app/tmp`
-  * set the folder where the web server log files will be cut into parts for multi-threaded processing:
+  * Set the folder where the web server log files will be cut into parts for multi-threaded processing:
     <br>`log_tmp_parts=/var/www/html/git/web_stat_tmp/app/tmp/parts`
 
   Now you can create a database for storage log data:
@@ -117,8 +126,8 @@ Now that the logs are done, you can setup the program:
   (This step will create the first record in the SQLite database, which will be updated by processing threads)
 
   5. Run the file `app/scripts/5_parse_core.sh`
-  (this file will launch 3 background threads (0, 1, 2) processing the log file
-  these threads will process modules from the `app/modules/` folder:
+  (this file will launch 3 background threads (0, 1, 2) processing the log file.
+  These threads will process modules from the `app/modules/` folder:
 
        * The "0" thread will collect the following information:
          <br>(modules_core0)
@@ -168,7 +177,7 @@ Now that the logs are done, you can setup the program:
         7. Make sure that the previous threads has completed (for example, using the command `ps -aux | grep parse_to_file.sh`) and then run the script `app/scripts/merge.sh`
         (this script will merge the results of 4 previous threads and add data to the database)
 
-Some other useful scripts from folder `app/scripts/`
+Some other useful scripts from folder `app/scripts/`:
 
 Instead of running the `app/scripts/5_parse_core.sh` script, you can run each thread separately:
       <ul>
@@ -184,16 +193,7 @@ Instead of running the `app/scripts/5_parse_core.sh` script, you can run each th
         <li>parse_to_file_core2.sh</li>
         <li>parse_to_file_core3.sh</li>
     </ul>
- Additionally, you can enable the following flags:
- <ul>
-    <li>('show_module_output', true) // Display module messages</li>
-    <li>('show_sql_query', true) // Display SQLite query</li>
-    <li>('show_module_counter', true) // Display the line counter (slows down significantly)</li>
-    <li>('url_length', 100) // Sets the length of output URLs to 100 characters</li>
-    <li>('gzip', true) // Incoming logs are archived with gzip</li>
-    <li>('gzip', false) // Incoming logs without gzip archiving</li>
-</ul>
-
+    
 ### Requirements
 
 * PDO
