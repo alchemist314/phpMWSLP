@@ -471,7 +471,7 @@ class cWebLogParser extends cWebLogCommon {
               [0] /stat?s=1;
               [1] xhttps://192.168.1.1/index.php;
               [2] x393x873x24;
-              [3] uhttps://192.168.1.1/test.html;
+              [3] xhttps://192.168.1.1/test.html;
               )
              */
 
