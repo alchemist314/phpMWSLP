@@ -71,7 +71,7 @@ TP/1.0" 200 49 "https://192.168.1.1/test.html" "Mozilla/5.0 (Linux; arm_64; Andr
 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.5.95.00 SA/3 Mobile Safari/53
 7.36"  "192.168.1.2"
 ```
-For collection more information like display resolutions and referal links you should put code below to pages on your site:
+For collection more information like display resolutions, referal links e.t.c. you should put code below to pages on your web site:
 
 ```
 <script type="text/javascript">
@@ -80,7 +80,8 @@ escape(document.referrer)+
 ((typeof(screen)=="undefined")?"":";x"+
 screen.width+"x"+screen.height+"x"+
 (screen.colorDepth?screen.colorDepth:screen.pixelDepth))+
-";x"+escape(document.URL)' alt='' border=0 width=0 height=0><\/a>")
+";x"+escape(document.URL)+";x"+escape(navigator.platform)+
+";x"+escape(navigator.userAgent)' alt='' border=0 width=0 height=0><\/a>")
 </script>
 
 ```
