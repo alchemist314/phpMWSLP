@@ -71,6 +71,21 @@ TP/1.0" 200 49 "https://192.168.1.1/test.html" "Mozilla/5.0 (Linux; arm_64; Andr
 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.5.95.00 SA/3 Mobile Safari/53
 7.36"  "192.168.1.2"
 ```
+For collection more information like display resolutions and referal links you should put code below to your site root directory:
+
+```
+<script type="text/javascript">
+document.write("<img src='https://your-site-name/stat?s=1;x"+
+escape(document.referrer)+
+((typeof(screen)=="undefined")?"":";x"+
+screen.width+"x"+screen.height+"x"+
+(screen.colorDepth?screen.colorDepth:screen.pixelDepth))+
+";x"+escape(document.URL)' alt='' border=0 width=0 height=0><\/a>")
+</script>
+
+```
+Create empty `stat` file in your site root directory, for example `touch stat`
+
 Now that the logs are done, you can setup the program:
 
 1. Edit the file `app/config/config.php`:
