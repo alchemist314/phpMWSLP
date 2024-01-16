@@ -1,5 +1,4 @@
 #!/bin/bash
 
-/usr/bin/php -q ../includes/web_log_parser.php 2 UPDATE_BY_LAST_DATE
-#/usr/bin/php -q ../includes/web_log_parser.php 2 UPDATE_BY_DATE
-#/usr/bin/php -q ../includes/web_log_parser.php 2 UPDATE_BY_SQL_ID 123
+# Using core 2
+taskset -c 2 /usr/bin/php -q ../includes/web_log_parser.php 2

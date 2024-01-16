@@ -29,12 +29,11 @@
  */
 
 include "web_log_parser_header.php";
-include "web_log_parser_actions.php";
 
 // Use multiple parts of log file
-if (strlen($argv[3])>0) {
-    $oWebLogParser->fVariablesSet('weblog_file', $aConfig['log_tmp_parts']."/".$argv[3]);
-    $oWebLogParser->fVariablesSet('out_file_name', $argv[3]);
+if (strlen($argv[2])>0) {
+    $oWebLogParser->fVariablesSet('weblog_file', $aConfig['log_tmp_parts']."/".$argv[2]);
+    $oWebLogParser->fVariablesSet('out_file_name', $argv[2]);
 } else {
     $oWebLogParser->fVariablesSet('weblog_file', $aConfig['log_path']."/".$aConfig['log_date']);
 }

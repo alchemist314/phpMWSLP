@@ -27,7 +27,6 @@
  */
 
 include "web_log_parser_header.php";
-include "web_log_parser_actions.php";
 
 // Path to web log
 $sParsePath=$aConfig['log_path']."/".$aConfig['log_date'];
@@ -45,6 +44,13 @@ $aModules = explode(",", $sModules);
 
 // Import modules
 $oWebLogParser->fVariablesSet('modules_to_parse', $aModules);
+
+// Check SQL ID
+if (empty($sSQLID)) {
+    $sErrorMsg ="Error: SQL ID is NULL! \n";
+    print $sErrorMsg;
+    exit;
+}
 
 // Check date
 $sDateByID=$oWebLogParser->fGetDateByID($sSQLID);

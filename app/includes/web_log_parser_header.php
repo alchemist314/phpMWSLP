@@ -48,6 +48,9 @@ foreach($aConfigFile as $sStr) {
 $sDate=$aConfig['log_date'];
 $oWebLogParser = new cWebLogParser($sDate);
 
+//Get SQL ID by date from config
+$sSQLID = $oWebLogParser->fGetLastSQL_ID($oWebLogParser->fVariablesGet('date_sql_short'));
+
 // Show output
 $oWebLogParser->fVariablesSet('show_module_output', PHP_MWSLP_SHOW_MODULE_OUTPUT);
 // If true SQL query will displayed

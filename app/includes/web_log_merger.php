@@ -28,7 +28,6 @@
  */
 
 include "web_log_parser_header.php";
-include "web_log_parser_actions.php";
 
 // Load files
 $aDir= scandir($aConfig['log_tmp']);
@@ -57,6 +56,13 @@ foreach ($aModules as $sModulesName) {
 
 // Import modules
 $oWebLogParser->fVariablesSet('modules_to_parse', $aModules);
+
+// Check SQL ID
+if (empty($sSQLID)) {
+    $sErrorMsg ="Error: SQL ID is NULL! \n";
+    print $sErrorMsg;
+    exit;
+}
 
 // Check SQL date
 $sDateByID = $oWebLogParser->fGetDateByID($sSQLID);

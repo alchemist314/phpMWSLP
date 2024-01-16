@@ -9,11 +9,14 @@ a_part_of_file_ad
 
 IFS=$'\n'
 
+i=0
 for line in $file_list
 do
-    echo "start web server log parse $line in background"
-    /usr/bin/php -q ../includes/web_log_parse_to_file.php 3 UPDATE_BY_DATE $line & 2> /dev/null > /dev/null
-    #/usr/bin/php -q ../includes/web_log_parse_to_file.php 3 UPDATE_BY_LAST_DATE $line & 2> /dev/null > /dev/null
+    echo "start web server log parse $line on core $i in background"
+    # Using multi-core
+    taskset -c $i /usr/bin/php -q ../includes/web_log_parse_to_file.php 3 $line & 2> /dev/null > /dev/null
+    # Using one core
     #/usr/bin/php -q ../includes/web_log_parse_to_file.php 3 $line & 2> /dev/null > /dev/null
+    i=$((i+1))
     sleep 1
 done
