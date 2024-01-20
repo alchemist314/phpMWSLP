@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This file is a part of phpMWSLP project. 
+# For more information see README.md file.
+
 . config
 
 day=`echo $log_date | cut -d "." -f 1`

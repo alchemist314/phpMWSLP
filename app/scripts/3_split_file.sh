@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This file is a part of phpMWSLP project. 
+# For more information see README.md file.
+
 . config
 
 rm $log_tmp/*

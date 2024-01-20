@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This file is a part of phpMWSLP project. 
+# For more information see README.md file.
+
 for i in 0 1 2
 do
     echo "start web server log parse with core $i in background"

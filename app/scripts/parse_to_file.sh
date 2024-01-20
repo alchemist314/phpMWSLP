@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# This file is a part of phpMWSLP project. 
+# For more information see README.md file
+
+
 file_list="
 a_part_of_file_aa
 a_part_of_file_ab
