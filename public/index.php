@@ -58,7 +58,7 @@ $oWebLogChart->fInit();
             </select>
             <br>
             <?php print $oWebLogChart->fVariablesGet('html_form_checkbox_list'); ?>
-            <input type="text" value="20" name="frm_count_limit" size="3" title="Count limit">
+            &nbsp;<input type="text" value="20" name="frm_count_limit" size="3" title="Count limit">
             <input type="submit" value="OK" name="frm_submit">
             
         </form>

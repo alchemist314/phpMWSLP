@@ -3,7 +3,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023 Golovanov Grigoriy
+  Copyright (c) 2023-2024 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -54,7 +54,14 @@ class cWebLogCommon {
         'module_social_networks',
         'module_day_online_users_count'
     );
-
+    
+    /**
+     * Variable storage
+     * 
+     * @param string $sVariableName
+     * @param integer or string $sVariableValue
+     * @param integer $sKey
+     */
     public function fVariablesSet($sVariableName, $sVariableValue, $sKey = NULL) {
         if (count($this->aVariables[$sVariableName]) > 0) {
             if (strlen($sKey) > 0) {
@@ -64,7 +71,13 @@ class cWebLogCommon {
             $this->aVariables[$sVariableName][] = $sVariableValue;
         }
     }
-
+    
+    /**
+     * Return variable by name
+     * 
+     * @param string $sVariableName
+     * @return string or integer
+     */
     public function fVariablesGet($sVariableName) {
         if (count($this->aVariables[$sVariableName]) > 1) {
             return $this->aVariables[$sVariableName];
@@ -72,7 +85,11 @@ class cWebLogCommon {
             return $this->aVariables[$sVariableName][0];
         }
     }
-
+    /**
+     * Erase variable by name
+     * 
+     * @param string $sVariableName
+     */
     public function fVariablesUnset($sVariableName) {
         unset($this->aVariables[$sVariableName]);
     }

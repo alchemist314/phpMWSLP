@@ -155,7 +155,10 @@ class cWebLogParser extends cWebLogCommon {
             $this->fDatePrepare($sDate);
         }
     }
-
+    
+    /**
+     * Prepare data arrays
+     */
     public function fInit() {
         if ($this->fVariablesGet('gzip') == true) {
             $aWebLog = gzfile($this->fVariablesGet('weblog_file'));
@@ -436,15 +439,29 @@ class cWebLogParser extends cWebLogCommon {
         } // modules count >0
     } // init
 
-    public function fModuleDisplayResolutions($aRequestArray, $sIP) {
+    /**
+     * Collect information about display resolutions
+     * 
+     * @param array $aRequestArray
+     * @param string $sIP
+     */
+    
+    private function fModuleDisplayResolutions($aRequestArray, $sIP) {
         $aDisplayCount = substr($aRequestArray[2], 1);
         if (preg_match("#^\d{1,}\*\d{1,}\*\d{1,}$#", $aDisplayCount)) {
             $this->fVariablesSet('module_display_resolutions', $aDisplayCount, $sIP);
         }
     }
-
-    public function fModuleReferalLinks($aRequestArray, $sReferalFlag, $sPageStatus, $sIP) {
-
+    
+    /**
+     * Collect information about refaral links
+     * 
+     * @param array $aRequestArray
+     * @param string $sReferalFlag
+     * @param integer $sPageStatus
+     * @param string $sIP
+     */
+    private function fModuleReferalLinks($aRequestArray, $sReferalFlag, $sPageStatus, $sIP) {
 
         if ($sReferalFlag === "ordinary") {
             /*
@@ -495,9 +512,8 @@ class cWebLogParser extends cWebLogCommon {
             $this->fVariablesSet('module_all_requests', substr($sRequest, 0, $sUrlLength), $sIP);
         }
         if (strlen($sReferalLink) > 0) {
-//            $aReferal[$sRef] = substr($sRef, 0, 100);
             $aReferalCount[$sIP] = substr($sReferalLink, 0, $sUrlLength);
-            // All referal links unique IP
+            // All referal links (unique IP)
             $this->fVariablesSet('module_all_referal_links', substr($sReferalLink, 0, $sUrlLength), $sIP);
         }
 
@@ -536,8 +552,14 @@ class cWebLogParser extends cWebLogCommon {
             }
         }
     }
-
-    public function fModuleOSTypeAndVersions($sStr, $sIP) {
+    
+    /**
+     * Collect information about Os type and versions
+     * 
+     * @param string $sStr
+     * @param string $sIP
+     */
+    private function fModuleOSTypeAndVersions($sStr, $sIP) {
 
         foreach ($this->aPatternOSVersions as $sOSVersion => $sSubStringLength) {
             $StrPos[$sOSVersion] = strripos($sStr, $sOSVersion);
@@ -548,8 +570,14 @@ class cWebLogParser extends cWebLogCommon {
             }
         }
     }
-
-    public function fModuleDeviceType($sStr, $sIP) {
+    
+    /**
+     * Collect information about device type
+     * 
+     * @param string $sStr
+     * @param string $sIP
+     */
+    private function fModuleDeviceType($sStr, $sIP) {
 
         $aSplittedString = explode(";", $sStr);
         for ($l = 0; $l < count($aSplittedString); $l++) {
@@ -580,8 +608,13 @@ class cWebLogParser extends cWebLogCommon {
             }
         }
     }
-
-    public function fModuleCitiesAndCountries($sIP) {
+    
+    /**
+     * Collect information about Cities and Countries
+     * 
+     * @param string $sIP
+     */
+    private function fModuleCitiesAndCountries($sIP) {
         
             try {
 
@@ -603,7 +636,12 @@ class cWebLogParser extends cWebLogCommon {
             }
     }
 
-
+    /**
+     * Calculate unique array sum
+     * 
+     * @param array $aArray
+     * @return array
+     */
     public function fCalcSumArray($aArray) {
         foreach ($aArray as $sKey => $sVal) {
             if (strlen($sVal) > 1) {
@@ -613,7 +651,12 @@ class cWebLogParser extends cWebLogCommon {
         
         return $aArrayNew;
     }
-
+    
+    /**
+     * Manipulation with date and time
+     * 
+     * @param string $sDate
+     */
     public function fDatePrepare($sDate) {
         $oFormattedDate = $this->oDateTime->createFromFormat('d.m.Y', $sDate);
         $sDateSQL = $oFormattedDate->format('Y'). "-" . $oFormattedDate->format('m') . "-" . $oFormattedDate->format('d') . " 00:00:00";
@@ -629,9 +672,11 @@ class cWebLogParser extends cWebLogCommon {
         $this->fVariablesSet('date_plus_one_day_timestamp', $sTimeStampPlusDay);
     }
 
-    public function fCreate10MinArray() {
+    /**
+     * Create 10 minut step array
+     */
+    private function fCreate10MinArray() {
         $sDate = substr($this->fVariablesGet('date_sql'), 0, 10);
-        // Create 10 minut step array
         $s = "00";
         $sCycle = 0;
         for ($t = 0; $t <= 23; $t++) {
@@ -650,8 +695,16 @@ class cWebLogParser extends cWebLogCommon {
         $this->fVariablesSet('10min_period', $aPeriodEvery10Min);
         $this->fVariablesSet('10min_timestamp', $aCalcTimeStamp);
     }
-
-    public function fOnlineUsers10min($sStr, $sIP, $aDateTime) {
+    
+    /**
+     * Collect information about online users by 10 minutss period
+     * 
+     * @param string $sStr
+     * @param string $sIP
+     * @param string $aDateTime
+     * @return array
+     */
+    private function fOnlineUsers10min($sStr, $sIP, $aDateTime) {
 
         preg_match_all("/\\[(.*?)\\]/", $sStr, $aTimeDateMatches);
         $sTimeDate = str_replace(array("[", "]"), "", $aTimeDateMatches[0][0]);
@@ -680,14 +733,19 @@ class cWebLogParser extends cWebLogCommon {
                 }
                 if (($sTimeStamp >= $aCalcTimeStamp[$rg]) &&
                         ($sTimeStamp <= $sCalcNextStamp)) {
-                    $aDateTime[$sTimeTG][$sIP]++;
+                    $aResult[$sTimeTG][$sIP]++;
                 }
             }
         }
-        return $aDateTime;
+        return $aResult;
     }
 
-
+    /**
+     * Get date by ID
+     * 
+     * @param integer $sID
+     * @return date
+     */
     public function fGetDateByID($sID) {
 
         $sQuery = "SELECT 
@@ -706,7 +764,13 @@ class cWebLogParser extends cWebLogCommon {
         }
         return $sDate;
     }
-
+    
+    /**
+     * Get last ID
+     * 
+     * @param date $sDate
+     * @return integer
+     */
     public function fGetLastSQL_ID($sDate = '') {
         if (strlen($sDate) > 0) {
             $sQuery = "SELECT id FROM "
@@ -727,7 +791,10 @@ class cWebLogParser extends cWebLogCommon {
         }
         return $sLastSQL_ID;
     }
-
+    
+    /**
+     * Insert data to SQL
+     */
     public function fInsertToSQL() {
         $sQuery = "INSERT INTO
                    " . PHP_MWSLP_SQL_TABLE . " (
@@ -770,7 +837,11 @@ class cWebLogParser extends cWebLogCommon {
             print "Error: " . $e->getMessage();
         }
     }
-    
+    /**
+     * Update SQL table by ID
+     * 
+     * @param integer $sSQL_ID
+     */
     public function fUpdateSQL($sSQL_ID) {
 
         foreach ($this->fVariablesGet('modules_to_parse') as $sModules) {
@@ -804,6 +875,9 @@ class cWebLogParser extends cWebLogCommon {
         }
     }
     
+    /**
+     * Save data to file
+     */
     public function fSaveToFile() {
         foreach ($this->fVariablesGet('modules_to_parse') as $sModules) {
             if ($this->aPatternArrayToSlice[$sModules]) {

@@ -3,7 +3,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023 Golovanov Grigoriy
+  Copyright (c) 2023-2024 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -25,12 +25,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
 
-*/
+ */
 
 namespace phpMWSLP\app\classes;
 
 class cWebLogChart extends cWebLogCommon {
 
+    /**
+     * Prepare data arrays
+     */
     public function fInit() {
 
         $this->fPDO();
@@ -134,15 +137,13 @@ class cWebLogChart extends cWebLogCommon {
             'Line' => 'frm_chart_line',
             'Pie' => 'frm_chart_pie',
             'Bar' => 'frm_chart_bar',
-            'Table' => 'frm_chart_table',
-            'CSV' => 'frm_chart_csv'
+            'Table' => 'frm_chart_table'
         ];
         $aFrmChartTooltip = [
             'Line' => "Line chart",
             'Pie' => "Pie chart",
             'Bar' => "Bar chart",
-            'Table' => "Table chart",
-            'CSV' => "CSV chart"
+            'Table' => "Table chart"
         ];
         foreach ($aFrmChartTooltip as $sChartName => $sFrmChartToolTip) {
             unset($sCheckBoxCheckedFlag);
@@ -257,16 +258,31 @@ class cWebLogChart extends cWebLogCommon {
         $this->fVariablesSet('html_table', $sTable);
     }
 
-    public function fTableGenerator($sModuleName, $aResult) {
-        $sTable="<table align=\"center\">";
+    /**
+     * Generate html table
+     * 
+     * @param string array $sModuleName
+     * @param array $aResult
+     * @return string
+     */
+    private function fTableGenerator($sModuleName, $aResult) {
+        $sTable = "<table align=\"center\">";
         foreach ($aResult as $sDate => $sValue) {
-            $sTable .="<tr><td>".$sDate."</td><td>".$sValue."</td></tr>";
+            $sTable .= "<tr><td>" . $sDate . "</td><td>" . $sValue . "</td></tr>";
         }
-        $sTable .="</table>";
-        return "document.getElementById('".$sModuleName."_table').innerHTML='".$sTable."'\n";
+        $sTable .= "</table>";
+        return "document.getElementById('" . $sModuleName . "_table').innerHTML='" . $sTable . "'\n";
     }
-    
-    public function fPieChartGenerator($sModuleName, $jResult, $sCutArray = NULL) {
+
+    /**
+     * Generate javascript data for pie chart
+     * 
+     * @param string array $sModuleName
+     * @param string JSON $jResult
+     * @param integer $sCutArray
+     * @return string
+     */
+    private function fPieChartGenerator($sModuleName, $jResult, $sCutArray = NULL) {
 
         $sPieChart = "var " . $sModuleName . "_pie = c3.generate({
                 bindto: '#" . $sModuleName . "_pie',
@@ -294,7 +310,14 @@ class cWebLogChart extends cWebLogCommon {
         return $sPieChart;
     }
 
-    public function fLineChartGenerator($sModuleName, $aResult) {
+    /**
+     * Generate javascript data for line chart
+     * 
+     * @param string array $sModuleName
+     * @param array $aResult
+     * @return string
+     */
+    private function fLineChartGenerator($sModuleName, $aResult) {
 
         $sLineChart = "var " . $sModuleName . "_line = c3.generate({
                 bindto: '#" . $sModuleName . "_line',
@@ -369,7 +392,14 @@ class cWebLogChart extends cWebLogCommon {
         return $sLineChart;
     }
 
-    public function fBarChartGenerator($sModuleName, $aResult) {
+    /**
+     * Generate javascript data for bar chart
+     * 
+     * @param string array $sModuleName
+     * @param array $aResult
+     * @return string
+     */
+    private function fBarChartGenerator($sModuleName, $aResult) {
 
         $sBarChart = "var " . $sModuleName . "_bar = c3.generate({
                 bindto: '#" . $sModuleName . "_bar',
@@ -449,7 +479,15 @@ class cWebLogChart extends cWebLogCommon {
         return $sBarChart;
     }
 
-    public function fPrepareDataForLineChart($aDataArray, $sCutArray = NULL, $sLegendName = NULL) {
+    /**
+     * Prepare data for charts
+     * 
+     * @param array $aDataArray
+     * @param integer $sCutArray
+     * @param string $sLegendName
+     * @return array
+     */
+    private function fPrepareDataForLineChart($aDataArray, $sCutArray = NULL, $sLegendName = NULL) {
         $sCutArray > 0 ? $aDataArray = array_slice($aDataArray, 0, $sCutArray) : "";
         foreach ($aDataArray as $sDate => $jString) {
             $aDataFromJSON = json_decode($jString, true);
