@@ -188,7 +188,7 @@ Now that the logs are done, you can setup the program:
         6. Run the file `app/scripts/parse_to_file.sh`
         (this script will launch 4 background processing threads for collecting Cities and Countries)
 
-        7. Make sure that the previous threads has completed (for example, using the command `ps -aux | grep parse_to_file.sh`) and then run the script `app/scripts/merge.sh`
+        7. Make sure that the previous threads was completed (for example, using the command `ps -aux | grep parse_to_file.sh`) and then run the script `app/scripts/merge.sh`
         (this script will merge the results of 4 previous threads and add data to the database)
 
 Some other useful scripts from folder `app/scripts/`:
