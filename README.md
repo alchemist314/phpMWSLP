@@ -1,4 +1,4 @@
-<h3><b>phpMWSLP</b> - php multicore webserver log parser</h3>
+<h3><b>phpMWSLP</b> - php multi-core webserver log parser</h3>
 
 * [About](#about-program)
 * [Configuration](#configuration)
