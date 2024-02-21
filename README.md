@@ -193,6 +193,8 @@ Now that the logs are done, you can setup the program:
 
 Some other useful scripts from folder `app/scripts/`:
 
+For multiple date parsing you can use `app/scripts/multiple_parse.sh`
+
 Instead of running the `app/scripts/5_parse_core.sh` script, you can run each thread separately:
       <ul>
         <li>parse_core0.sh</li>
@@ -200,7 +202,7 @@ Instead of running the `app/scripts/5_parse_core.sh` script, you can run each th
         <li>parse_core2.sh</li>
         <li>parse_core3.sh</li>
       </ul>
- Also, instead of running `app/scripts/parse_to_file`, you can run each thread separately:
+Also, instead of running `app/scripts/parse_to_file`, you can run each thread separately:
     <ul>
         <li>parse_to_file_core0.sh</li>
         <li>parse_to_file_core1.sh</li>
@@ -210,6 +212,8 @@ Instead of running the `app/scripts/5_parse_core.sh` script, you can run each th
     
 ### Requirements
 
+
+* PHP >= 7.3
 * PDO
 * SQLIte
 * MaxMind DB Reader
