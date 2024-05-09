@@ -3,6 +3,7 @@
 * [About](#about-program)
 * [Configuration](#configuration)
 * [Requirements](#requirements)
+* [License](#license)
 
 ### About program
 
@@ -219,3 +220,7 @@ Also, instead of running `app/scripts/parse_to_file`, you can run each thread se
 * MaxMind DB Reader
 * MaxMind Web Service Clients
 * GeoIP2 PHP API
+
+### License
+
+MIT License
