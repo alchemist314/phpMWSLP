@@ -2,7 +2,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023 Golovanov Grigoriy
+  Copyright (c) 2023-2024 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -46,7 +46,20 @@ $oWebLogChart->fInit();
     </head>
 
     <body>
-        <form action="index.php" method="post">
+	<script>
+	    var aNewArr=[];
+	    var aArr=[];
+	    aArr=[<?php print $oWebLogChart->fVariablesGet('html_line_chart_data'); ?>[]];
+	    aArr.forEach((k) => {
+    		aStr=k.toString().split(',');
+    		k.reverse();
+    		k.slice(0, -1);
+        	k.unshift(aStr[0]);
+        	aNewArr.push(k);
+	    });
+
+	</script>
+        <form action="index.php" method="post" id="frm_main">
             <select name="frm_modules">
                 <?php print $oWebLogChart->fVariablesGet('html_form_select_modules'); ?>
             </select>
@@ -58,22 +71,57 @@ $oWebLogChart->fInit();
             </select>
             <br>
             <?php print $oWebLogChart->fVariablesGet('html_form_checkbox_list'); ?>
-            &nbsp;<input type="text" value="20" name="frm_count_limit" size="3" title="Count limit">
-            <input type="submit" value="OK" name="frm_submit">
+            &nbsp;Data limit: <input type="text" value="<?php !isset($_REQUEST['frm_count_limit']) ? print '20':print $_REQUEST['frm_count_limit']; ?>" name="frm_count_limit" size="3" title="Count limit">
+            &nbsp;Chart limit: <input type="text" value="<?php !isset($_REQUEST['frm_chart_limit']) ? print '5':print $_REQUEST['frm_chart_limit']; ?>" name="frm_chart_limit" size="3" title="Chart limit">
+            <input type="button" value="OK" name="frm_submit" onclick="fFormSubmit()">
             
         </form>
 
         <?php print $oWebLogChart->fVariablesGet('html_div_module_list'); ?>
         
+        <script src="<?= PHP_MWSLP_HTTP ?>/js/action.js?210824"></script>       
         <script src="<?= PHP_MWSLP_HTTP ?>/js/d3.v5.min.js?19012023" charset="utf-8"></script>
         <script src="<?= PHP_MWSLP_HTTP ?>/js/c3.min.js?19012023"></script>
         <script type="text/javascript">
+
         <?php print $oWebLogChart->fVariablesGet('html_pie_char'); ?>
         <?php print $oWebLogChart->fVariablesGet('html_table'); ?>
+        <?php print $oWebLogChart->fVariablesGet('html_line_chart_legend_table'); ?>
         <?php print $oWebLogChart->fVariablesGet('html_line_char'); ?>
+        <?php print $oWebLogChart->fVariablesGet('html_bar_chart_legend_table'); ?>
         <?php print $oWebLogChart->fVariablesGet('html_bar_char'); ?>
+   
+  
+      function fChangeData(val, prefix) {
+        if (prefix=='line') {
+	    if (val.length>0) {
+        	<?php print $oWebLogChart->fVariablesGet('module_name'); ?>_line.load({
+        	    unload: true,
+            	    columns: fArrayReverse(aArr, val, prefix)
+        	});
+    	    } else {
+        	<?php print $oWebLogChart->fVariablesGet('module_name'); ?>_line.load({
+            	    unload: true,
+            	    columns:[]
+        	});
+    	    }
+	}
+        if (prefix=='bar') {
+	    if (val.length>0) {
+        	<?php print $oWebLogChart->fVariablesGet('module_name'); ?>_bar.load({
+        	    unload: true,
+            	    columns: fArrayReverse(aArr, val, prefix)
+        	});
+    	    } else {
+        	<?php print $oWebLogChart->fVariablesGet('module_name'); ?>_bar.load({
+            	    unload: true,
+            	    columns:[]
+        	});
+    	    }
+	}
+     }
         </script>
-       
+
     </body>
 </html>
 

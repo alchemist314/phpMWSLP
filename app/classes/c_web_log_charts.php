@@ -68,7 +68,7 @@ class cWebLogChart extends cWebLogCommon {
                      FROM
                             " . PHP_MWSLP_SQL_TABLE . " 
                 ORDER BY
-                sdate ASC";
+                sdate DESC";
         try {
             $oResult = $this->oPDO->query($vQuery);
 
@@ -150,7 +150,7 @@ class cWebLogChart extends cWebLogCommon {
             if (preg_match("/on/", $_REQUEST[$aFrmChartChekBoxArray[$sChartName]]) == true) {
                 $aCheckBoxCheckedFlag[$sChartName] = "checked";
             }
-            $sFormCheckBoxList .= "<input type='checkbox' name='" . $aFrmChartChekBoxArray[$sChartName] . "' title='" . $sFrmChartToolTip . "' " . $aCheckBoxCheckedFlag[$sChartName] . ">" . $sChartName . "\n";
+            $sFormCheckBoxList .= "<input type='checkbox' id='".$aFrmChartChekBoxArray[$sChartName]."' name='" . $aFrmChartChekBoxArray[$sChartName] . "' title='" . $sFrmChartToolTip . "' " . $aCheckBoxCheckedFlag[$sChartName] . ">" . $sChartName . "\n";
         }
         $this->fVariablesSet('html_form_checkbox_list', $sFormCheckBoxList);
 
@@ -182,7 +182,7 @@ class cWebLogChart extends cWebLogCommon {
             }
         }
 
-        $aMoulesAndArrays = array(
+        $aModulesAndArrays = array(
             'module_ip_unique_count' => &$aUniqIP,
             'module_ip_top_100' => &$aIP_top100,
             'module_search_engines' => &$aSearchSys,
@@ -200,7 +200,7 @@ class cWebLogChart extends cWebLogCommon {
             'module_day_online_users_count' => &$aOnlineUsersCountFinal
         );
 
-        $aMoulesAndJSONStrings = array(
+        $aModulesAndJSONStrings = array(
             'module_ip_top_100' => $jIP_top100,
             'module_search_engines' => $jSearch,
             'module_all_requests' => $jRequestTop100,
@@ -216,35 +216,38 @@ class cWebLogChart extends cWebLogCommon {
             'module_day_online_users_count'
         );
 
-        $aMoulesLineArrayToSlice = array(
+        $aModulesLineArrayToSlice = array(
             'module_ip_unique_count' => 1000,
             'module_ip_top_100' => 100,
             'module_day_online_users_count' => 10000
         );
 
-        $aMoulesAndLegends = array(
+        $aModulesAndLegends = array(
             'module_ip_unique_count' => "unique IP count",
             'module_10min_online_users_count' => "count",
             'module_day_online_users_count' => "online users count"
         );
 
-        foreach ($aMoulesAndArrays as $sModuleName => $aDataArray) {
+        foreach ($aModulesAndArrays as $sModuleName => $aDataArray) {
             if ($_REQUEST['frm_modules'] == $sModuleName) {
+                $this->fVariablesSet('module_name', $sModuleName);
                 foreach ($aFrmChartTooltip as $sChartName => $sNULL) {
                     if ($aCheckBoxCheckedFlag[$sChartName] === "checked") {
                         if ($sChartName === "Pie") {
-                            $sPieChart .= $this->fPieChartGenerator($sModuleName, $aMoulesAndJSONStrings[$sModuleName], $_REQUEST['frm_count_limit']);
+                            $sPieChart .= $this->fPieChartGenerator($sModuleName, $aModulesAndJSONStrings[$sModuleName], $_REQUEST['frm_count_limit']);
                         }
                         if ($sChartName === "Line") {
-                            $aResult = $this->fPrepareDataForLineChart($aDataArray, $aMoulesLineArrayToSlice[$sModuleName], $aMoulesAndLegends[$sModuleName]);
+                            $aResult = $this->fPrepareDataForLineChart($aDataArray, $aModulesLineArrayToSlice[$sModuleName], $aModulesAndLegends[$sModuleName]);
                             $sLineChart .= $this->fLineChartGenerator($sModuleName, $aResult);
+                            $sLineChartLegendTable = $this->fLineChartLegendTable($sModuleName, json_decode($aModulesAndJSONStrings[$sModuleName], true), 'line');
                         }
                         if ($sChartName === "Bar") {
-                            $aResult = $this->fPrepareDataForLineChart($aDataArray, $aMoulesLineArrayToSlice[$sModuleName], $aMoulesAndLegends[$sModuleName]);
+                            $aResult = $this->fPrepareDataForLineChart($aDataArray, $aModulesLineArrayToSlice[$sModuleName], $aModulesAndLegends[$sModuleName]);
                             $sBarChart .= $this->fBarChartGenerator($sModuleName, $aResult);
+                            $sBarChartLegendTable = $this->fLineChartLegendTable($sModuleName, json_decode($aModulesAndJSONStrings[$sModuleName], true), 'bar');
                         }
                         if ($sChartName === "Table") {
-                            $sTable = $this->fTableGenerator($sModuleName, json_decode($aMoulesAndJSONStrings[$sModuleName], true));
+                            $sTable = $this->fTableGenerator($sModuleName, json_decode($aModulesAndJSONStrings[$sModuleName], true));
                         }
                     }
                 }
@@ -254,8 +257,11 @@ class cWebLogChart extends cWebLogCommon {
 
         $this->fVariablesSet('html_pie_char', $sPieChart);
         $this->fVariablesSet('html_line_char', $sLineChart);
+        $this->fVariablesSet('html_line_chart_legend_table', $sLineChartLegendTable);
+        $this->fVariablesSet('html_bar_chart_legend_table', $sBarChartLegendTable);
         $this->fVariablesSet('html_bar_char', $sBarChart);
         $this->fVariablesSet('html_table', $sTable);
+
     }
 
     /**
@@ -265,6 +271,7 @@ class cWebLogChart extends cWebLogCommon {
      * @param array $aResult
      * @return string
      */
+
     private function fTableGenerator($sModuleName, $aResult) {
         $sTable = "<table align=\"center\">";
         foreach ($aResult as $sDate => $sValue) {
@@ -273,6 +280,24 @@ class cWebLogChart extends cWebLogCommon {
         $sTable .= "</table>";
         return "document.getElementById('" . $sModuleName . "_table').innerHTML='" . $sTable . "'\n";
     }
+
+    /**
+     * Generate line chart legend table
+     * 
+     * @param string array $sModuleName
+     * @param array $aResult
+     * @param string $sChartPrefix
+     * @return string
+     */
+    private function fLineChartLegendTable($sModuleName, $aResult, $sChartPrefix='') {
+        $sTable="<div style=\"overflow:auto; height:200px; background-color:#efefef;\"><table align=\"center\">";
+        foreach ($aResult as $sName => $sValue) {
+            $sTable .="<tr><td><input type=\"checkbox\" id=\"".$sChartPrefix."_".$sName."\" onchange=\"fChangeData(this.id, \'".$sChartPrefix."\')\"></td><td>".$sName."</td><td>".$sValue."</td></tr>\\\n";
+        }
+        $sTable .="</table></div>";
+        return "document.getElementById('".$sModuleName."_table').innerHTML='".$sTable."';\n";
+    }
+
 
     /**
      * Generate javascript data for pie chart
@@ -328,7 +353,7 @@ class cWebLogChart extends cWebLogCommon {
         }
 
         $sLineChart .= "x : 'x',
-                        columns: [
+                        columns: fChartLimit(".$_REQUEST['frm_chart_limit'].", 'line')
                         ";
 
         $sStartString = "['x',";
@@ -336,24 +361,31 @@ class cWebLogChart extends cWebLogCommon {
         $l = 0;
         // Date
         foreach ($aResult['dates'] as $sDate) {
-            $l > 0 ? $sLineChart .= ", '" . $sDate . "'" : $sLineChart .= $sStartString . "'" . $sDate . "'";
+            if ($l > 0) {
+                $sLineChartData .= ", '" . $sDate . "'";
+            } else {
+                $sLineChartData .= $sStartString . "'" . $sDate . "'";
+            }
             $l++;
         }
-        $sLineChart .= $sEndString;
+        $sLineChartData .= $sEndString;
         // Request link
         foreach (array_slice(array_unique($aResult['names']), 0, $_REQUEST['frm_count_limit']) as $sRequestName) {
-            $sLineChart .= "\n['" . $sRequestName . "', ";
+            $sLineChartData .= "\n['" . $sRequestName . "', ";
             // Date
             $n = 0;
             foreach ($aResult['dates'] as $sDate) {
                 strlen($aResult['dates_names_values'][$sDate][$sRequestName]) > 0 ? $sRequestValue = $aResult['dates_names_values'][$sDate][$sRequestName] : $sRequestValue = 'null';
-                $n > 0 ? $sLineChart .= ", " . $sRequestValue : $sLineChart .= $sRequestValue;
+                if ($n > 0) {
+                    $sLineChartData .=", " . $sRequestValue;
+                } else {
+                    $sLineChartData .= $sRequestValue;
+                }
                 $n++;
             }
-            $sLineChart .= $sEndString;
+            $sLineChartData .= $sEndString;
         }
         $sLineChart .= "
-                        ]
                 },
                 
                 axis : {
@@ -388,7 +420,7 @@ class cWebLogChart extends cWebLogCommon {
         }
 
 \n";
-
+        $this->fVariablesSet('html_line_chart_data', $sLineChartData);
         return $sLineChart;
     }
 
@@ -411,7 +443,7 @@ class cWebLogChart extends cWebLogCommon {
 
         $sBarChart .= "
     			x : 'x',
-                        columns: [
+                        columns: fChartLimit(".$_REQUEST['frm_chart_limit'].", 'bar')
                         ";
 
         $sStartString = "['x',";
@@ -419,24 +451,24 @@ class cWebLogChart extends cWebLogCommon {
         $l = 0;
         // Date
         foreach ($aResult['dates'] as $sDate) {
-            $l > 0 ? $sBarChart .= ", '" . $sDate . "'" : $sBarChart .= $sStartString . "'" . $sDate . "'";
+            $l > 0 ? $sBarChartData .= ", '" . $sDate . "'" : $sBarChartData .= $sStartString . "'" . $sDate . "'";
             $l++;
         }
-        $sBarChart .= $sEndString;
+        $sBarChartData .= $sEndString;
         // Request link
         foreach (array_slice(array_unique($aResult['names']), 0, $_REQUEST['frm_count_limit']) as $sRequestName) {
-            $sBarChart .= "\n['" . $sRequestName . "', ";
+            $sBarChartData .= "\n['" . $sRequestName . "', ";
             // Date
             $n = 0;
             foreach ($aResult['dates'] as $sDate) {
                 strlen($aResult['dates_names_values'][$sDate][$sRequestName]) > 0 ? $sRequestValue = $aResult['dates_names_values'][$sDate][$sRequestName] : $sRequestValue = 'null';
-                $n > 0 ? $sBarChart .= ", " . $sRequestValue : $sBarChart .= $sRequestValue;
+                $n > 0 ? $sBarChartData .= ", " . $sRequestValue : $sBarChartData .= $sRequestValue;
                 $n++;
             }
-            $sBarChart .= $sEndString;
+            $sBarChartData .= $sEndString;
         }
         $sBarChart .= "
-                        ],
+                        ,
                 type: 'bar',
                 },
                 
@@ -476,6 +508,7 @@ class cWebLogChart extends cWebLogCommon {
         }
 \n";
 
+        $this->fVariablesSet('html_line_chart_data', $sBarChartData);
         return $sBarChart;
     }
 
