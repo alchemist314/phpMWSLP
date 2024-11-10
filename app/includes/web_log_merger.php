@@ -47,10 +47,10 @@ foreach ($aModules as $sModulesName) {
     $aModulesResult[$sModulesName] = [];
     foreach ($aArrayPart[$sModulesName] as $sNumber => $sValue[0]) {
         $aJSON = json_decode($sValue[0][0], true);
-        $aModulesResult[$sModulesName] = array_merge($aModulesResult[$sModulesName], $aJSON);
+        $aModulesResult[$sModulesName] = array_merge((array)$aModulesResult[$sModulesName], (array)$aJSON);
     }
     $aModulesResult[$sModulesName] = $oWebLogParser->fCalcSumArray($aModulesResult[$sModulesName]);
-    arsort($aModulesResult[$sModulesName]);
+    is_countable($aModulesResult[$sModulesName]) ? arsort($aModulesResult[$sModulesName]) : "";
     $oWebLogParser->fVariablesSet($sModulesName, $aModulesResult[$sModulesName]);
 }
 

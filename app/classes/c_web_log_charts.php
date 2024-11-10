@@ -314,7 +314,7 @@ class cWebLogChart extends cWebLogCommon {
                 data: {
                         columns: [
                         ";
-        $sCutArray > 0 ? $aDataArray = array_slice(json_decode($jResult, true), 0, $sCutArray) : $aDataArray = json_decode($jResult, true);
+        $sCutArray > 0 ? $aDataArray = array_slice((array)json_decode($jResult, true), 0, $sCutArray) : $aDataArray = json_decode($jResult, true);
         foreach ($aDataArray as $sName => $sValue) {
             $sPieChart .= "['" . $sName . "', " . $sValue . "],\n";
         }
@@ -370,7 +370,7 @@ class cWebLogChart extends cWebLogCommon {
         }
         $sLineChartData .= $sEndString;
         // Request link
-        foreach (array_slice(array_unique($aResult['names']), 0, $_REQUEST['frm_count_limit']) as $sRequestName) {
+        foreach (array_slice(array_unique((array)$aResult['names']), 0, $_REQUEST['frm_count_limit']) as $sRequestName) {
             $sLineChartData .= "\n['" . $sRequestName . "', ";
             // Date
             $n = 0;
@@ -456,7 +456,7 @@ class cWebLogChart extends cWebLogCommon {
         }
         $sBarChartData .= $sEndString;
         // Request link
-        foreach (array_slice(array_unique($aResult['names']), 0, $_REQUEST['frm_count_limit']) as $sRequestName) {
+        foreach (array_slice(array_unique((array)$aResult['names']), 0, $_REQUEST['frm_count_limit']) as $sRequestName) {
             $sBarChartData .= "\n['" . $sRequestName . "', ";
             // Date
             $n = 0;
@@ -521,7 +521,7 @@ class cWebLogChart extends cWebLogCommon {
      * @return array
      */
     private function fPrepareDataForLineChart($aDataArray, $sCutArray = NULL, $sLegendName = NULL) {
-        $sCutArray > 0 ? $aDataArray = array_slice($aDataArray, 0, $sCutArray) : "";
+        $sCutArray > 0 ? $aDataArray = array_slice((array)$aDataArray, 0, $sCutArray) : "";
         foreach ($aDataArray as $sDate => $jString) {
             $aDataFromJSON = json_decode($jString, true);
             // jString is not a valid JSON string, try to pass it as a variable

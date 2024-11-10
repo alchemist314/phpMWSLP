@@ -165,12 +165,12 @@ class cWebLogParser extends cWebLogCommon {
         } else {
             $aWebLog = file($this->fVariablesGet('weblog_file'));
         }
-        $sWebLogCount = count($aWebLog);
+        $sWebLogCount = count((array)$aWebLog);
 
         // Create 10min period array
         $this->fCreate10MinArray();
 
-        if (count($this->fVariablesGet('modules_to_parse')) > 0) {
+        if (count((array)$this->fVariablesGet('modules_to_parse')) > 0) {
             $sCount = 0;
             /*
              * $sStr variable contains (for exmaple):
@@ -400,28 +400,28 @@ class cWebLogParser extends cWebLogCommon {
             foreach ($this->fVariablesGet('modules_to_parse') as $sModules) {
                 switch ($sModules) {
                     case 'module_ip_top_100':
-                        $aTOP100IP = array_slice($aIPCount, 0, $this->aPatternArrayToSlice[$sModules]);
-                        arsort($aTOP100IP);
+                        (array)$aTOP100IP = array_slice((array)$aIPCount, 0, $this->aPatternArrayToSlice[$sModules]);
+                        is_countable($aTOP100IP) ? arsort($aTOP100IP) : "";
                         $aModulesResult[$sModules] = $aTOP100IP;
                         $this->fVariablesSet('module_ip_top_100', $aModulesResult[$sModules]);
                         break;
                     case 'module_ip_unique_count':
-                        $aModulesResult[$sModules] = count($aUniqueIP);
+                        $aModulesResult[$sModules] = count((array)$aUniqueIP);
                         $this->fVariablesSet('module_ip_unique_count', $aModulesResult[$sModules]);
                         break;
                     case 'module_10min_online_users_count':
                         $aPeriodEvery10Min = $this->fVariablesGet('10min_period');
                         foreach ($aPeriodEvery10Min as $sKey => $aVal) {
-                            $aOnlineUsersPer10min[$sKey] = count($aDateTime[$sKey]);
+                            $aOnlineUsersPer10min[$sKey] = count((array)$aDateTime[$sKey]);
                         }
-                        ksort($aOnlineUsersPer10min);
+                        is_countable($aOnlineUsersPer10min) ? ksort($aOnlineUsersPer10min) : "";
                         $this->fVariablesUnset($sModules);
                         $this->fVariablesSet($sModules, $aOnlineUsersPer10min);
                         break;
                     default:
                         $this->fVariablesSet($sModules."_raw_data", $this->fVariablesGet($sModules));
                         $aModulesResult[$sModules] = $this->fCalcSumArray($this->fVariablesGet($sModules));
-                        arsort($aModulesResult[$sModules]);
+                        is_countable($aModulesResult[$sModules]) ? arsort($aModulesResult[$sModules]) : "";
                         $this->fVariablesUnset($sModules);
                         $this->fVariablesSet($sModules, $aModulesResult[$sModules]);
                         break;
@@ -580,7 +580,7 @@ class cWebLogParser extends cWebLogCommon {
     private function fModuleDeviceType($sStr, $sIP) {
 
         $aSplittedString = explode(";", $sStr);
-        for ($l = 0; $l < count($aSplittedString); $l++) {
+        for ($l = 0; $l < count((array)$aSplittedString); $l++) {
             foreach ($this->aPatternDeviceList as $sDevice => $sDeviceName) {
                 if (preg_match("/" . $sDevice . "/", $aSplittedString[$l])) {
                     $this->fVariablesSet('module_device_type', $sDeviceName, $sIP);
@@ -724,9 +724,9 @@ class cWebLogParser extends cWebLogCommon {
             $sTimeStamp = strtotime($sYear . "-" . $sMonth . "-" . $sDay . " " . $sTime);
             $aTimeCount10Min = $this->fVariablesGet('10min_count');
             $aCalcTimeStamp = $this->fVariablesGet('10min_timestamp');
-            for ($rg = 0; $rg < (count($aCalcTimeStamp)); $rg++) {
+            for ($rg = 0; $rg < (count((array)$aCalcTimeStamp)); $rg++) {
                 $sTimeTG = $aTimeCount10Min[$rg];
-                if (($rg + 1) >= count($aCalcTimeStamp)) {
+                if (($rg + 1) >= count((array)$aCalcTimeStamp)) {
                     $sCalcNextStamp = $this->fVariablesGet('date_plus_one_day_timestamp');
                 } else {
                     $sCalcNextStamp = $aCalcTimeStamp[$rg + 1];
@@ -846,7 +846,7 @@ class cWebLogParser extends cWebLogCommon {
 
         foreach ($this->fVariablesGet('modules_to_parse') as $sModules) {
             if ($this->aPatternArrayToSlice[$sModules]) {
-                $aValueToSQL = array_slice($this->fVariablesGet($sModules), 0, $this->aPatternArrayToSlice[$sModules]);
+                $aValueToSQL = array_slice((array)$this->fVariablesGet($sModules), 0, $this->aPatternArrayToSlice[$sModules]);
             } else {
                 $aValueToSQL = $this->fVariablesGet($sModules);
             }
@@ -881,7 +881,7 @@ class cWebLogParser extends cWebLogCommon {
     public function fSaveToFile() {
         foreach ($this->fVariablesGet('modules_to_parse') as $sModules) {
             if ($this->aPatternArrayToSlice[$sModules]) {
-                $aValueToSQL = array_slice($this->fVariablesGet($sModules."_raw_data"), 0, $this->aPatternArrayToSlice[$sModules]);
+                $aValueToSQL = array_slice((array)$this->fVariablesGet($sModules."_raw_data"), 0, $this->aPatternArrayToSlice[$sModules]);
             } else {
                 $aValueToSQL = $this->fVariablesGet($sModules."_raw_data");
             }

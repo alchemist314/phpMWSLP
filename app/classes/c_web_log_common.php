@@ -63,7 +63,7 @@ class cWebLogCommon {
      * @param integer $sKey
      */
     public function fVariablesSet($sVariableName, $sVariableValue, $sKey = NULL) {
-        if (count($this->aVariables[$sVariableName]) > 0) {
+        if (count((array)$this->aVariables[$sVariableName]) > 0) {
             if (strlen($sKey) > 0) {
                 $this->aVariables[$sVariableName][$sKey] = $sVariableValue;
             }
@@ -79,7 +79,7 @@ class cWebLogCommon {
      * @return string or integer
      */
     public function fVariablesGet($sVariableName) {
-        if (count($this->aVariables[$sVariableName]) > 1) {
+        if (count((array)$this->aVariables[$sVariableName]) > 1) {
             return $this->aVariables[$sVariableName];
         } else {
             return $this->aVariables[$sVariableName][0];
