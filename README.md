@@ -31,7 +31,7 @@ For now the program has following modules:
   <li>module_all_referal_links // All referral links</li>
   <li>module_all_requests // All requests to the web server</li>
   <li>module_all_referal_links_exclude_known // All referrals from sources excluding known ones</li>
-  <li>module_search_engines_google  Transitions from google</li>
+  <li>module_search_engines_google // Transitions from google</li>
   <li>module_status_404_requests // All requests with status 404</li>
   <li>module_status_200_requests // All requests with status 200</li>
   <li>module_10min_online_users_count // Number of online every 10 minutes</li>
@@ -84,7 +84,7 @@ screen.width+"x"+screen.height+"x"+
 </script>
 
 ```
-Create empty `stat` file in your site root directory, for example `touch stat`
+Create empty `stat` file in your site root directory.
 
 Now that the logs are done, you can setup the program:
 
