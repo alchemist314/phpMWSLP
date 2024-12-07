@@ -16,6 +16,8 @@ The specific of the program is that it can process the web server log file in mu
 For now the program has following modules:
 </p>
 <ul>
+  <li>module_browsers_names // Browsers names</li>
+  <li>module_browsers_versions // Top 100 browsers versions</li>
   <li>module_ip_top_100  // Top 100 IP addresses</li>
   <li>module_ip_unique_count // Total number of unique IP addresses</li>
   <li>module_display_resolutions // Screen resolutions</li>
