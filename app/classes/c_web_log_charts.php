@@ -77,6 +77,8 @@ class cWebLogChart extends cWebLogCommon {
                 if (($aRow['datetonumber'] >= $_REQUEST['frm_date_start_id']) &&
                         ($aRow['datetonumber'] <= $_REQUEST['frm_date_stop_id'])) {
 
+                    $aBrowsersNames[$aRow['sdate']] = $aRow['browsers_names'];
+                    $aBrowsersVersions[$aRow['sdate']] = $aRow['browsers_versions'];
                     $aUniqIP[$aRow['sdate']] = $aRow['ip_uniq'];
                     $aRequest[$aRow['sdate']] = $aRow['query_top100'];
                     $aRequestExcludeKnown[$aRow['sdate']] = $aRow['request_exclude_known'];
@@ -97,8 +99,9 @@ class cWebLogChart extends cWebLogCommon {
                     $sStartSQLDate = ($aRow['datetonumber']);
                 }
                 if ($aRow['datetonumber'] == $_REQUEST['frm_date_stop_id']) {
-
                     $sStopSQLDate = ($aRow['datetonumber']);
+                    $jBrowsersNames = $aRow['browsers_names'];
+                    $jBrowsersVersions = $aRow['browsers_versions'];                    
                     $jUniqIP = $aRow['ip_uniq'];
                     $jSearch = $aRow['search_sys'];
                     $jTraf = json_decode($aRow['10min_traffic']);
@@ -183,6 +186,8 @@ class cWebLogChart extends cWebLogCommon {
         }
 
         $aModulesAndArrays = array(
+            'module_browsers_names' => &$aBrowsersNames,
+            'module_browsers_versions' => &$aBrowsersVersions,            
             'module_ip_unique_count' => &$aUniqIP,
             'module_ip_top_100' => &$aIP_top100,
             'module_search_engines' => &$aSearchSys,
@@ -201,6 +206,8 @@ class cWebLogChart extends cWebLogCommon {
         );
 
         $aModulesAndJSONStrings = array(
+            'module_browsers_names' => $jBrowsersNames,
+            'module_browsers_versions' => $jBrowsersVersions,            
             'module_ip_top_100' => $jIP_top100,
             'module_search_engines' => $jSearch,
             'module_all_requests' => $jRequestTop100,
