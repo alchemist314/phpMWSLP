@@ -37,7 +37,16 @@ class cWebLogParser extends cWebLogCommon {
 
     public $oGeoDBreader;
     public $oDateTime;
-
+    
+    // Using in method fModuleBrowsers()
+    public $aPatternBrowsers = array(
+        "Chrome" => "Chrome",
+        "Firefox" => "Firefox",
+        "Opera" => "Opera",
+        "YaBrowser" => "YaBrowser",
+        "Edge" => "Edge",
+        "Safari" => "Safari",
+    );
     // Using in method fModuleReferalLinks()
     public $aPatternSocialNetworks = array(
         "facebook" => "facebook.com",
@@ -69,7 +78,7 @@ class cWebLogParser extends cWebLogCommon {
     // Using in method fModuleReferalLinks()
     // Which domain will be excluded from output
     public $aPatternExcludeDomains = [
-        "astro-online.ru"
+        "somedomain.toexclude"
     ];
 
     // Using in method fModuleDeviceType()
@@ -100,6 +109,8 @@ class cWebLogParser extends cWebLogCommon {
     // Using in fUpdateSQL() method 
     // Modules and their column names in database
     public $aPatternSQLNames = [
+        'module_browsers_names' => 'browsers_names',
+        'module_browsers_versions' => 'browsers_versions',
         'module_ip_unique_count' => 'ip_uniq',
         'module_ip_top_100' => 'ip_top100',
         'module_search_engines' => 'search_sys',
@@ -120,6 +131,7 @@ class cWebLogParser extends cWebLogCommon {
     // Using in fUpdateSQL() method 
     // Which modules results will be cutting
     public $aPatternArrayToSlice = [
+        'module_browsers_versions' => 100,
         'module_ip_top_100' => 100,
         'module_all_requests' => 100,
         'module_all_referal_links' => 100,
@@ -130,6 +142,8 @@ class cWebLogParser extends cWebLogCommon {
     // Using in fUpdateSQL() method 
     // Which modules results will storage data as JSON string
     public $aPatternArrayToJSON = [
+        'module_browsers_versions' => 'browsers_versions',
+        'module_browsers_names' => 'browsers_names',
         'module_ip_top_100' => 'ip_top100',
         'module_search_engines' => 'search_sys',
         'module_all_requests' => 'query_top100',
@@ -325,6 +339,11 @@ class cWebLogParser extends cWebLogCommon {
                         // Module router
                         foreach ($this->fVariablesGet('modules_to_parse') as $sModules) {
                             switch ($sModules) {
+                                case 'module_browsers_names':
+                                case 'module_browsers_versions':
+                                    // Display resolutions
+                                    $aMethodToExecute['fModuleBrowsers'] = 1;
+                                    break;
                                 case 'module_display_resolutions':
                                     // Display resolutions
                                     $aMethodToExecute['fModuleDisplayResolutions'] = 1;
@@ -368,6 +387,9 @@ class cWebLogParser extends cWebLogCommon {
                         
                         foreach($aMethodToExecute as $sMethod => $sValue) {
                             switch ($sMethod) {
+                                case 'fModuleBrowsers':
+                                    $this->fModuleBrowsers($sStr, $sIP);
+                                    break;                                
                                 case 'fModuleDisplayResolutions':
                                     $this->fModuleDisplayResolutions($aRequestArray, $sIP);
                                     break;
@@ -439,6 +461,28 @@ class cWebLogParser extends cWebLogCommon {
         } // modules count >0
     } // init
 
+    /**
+     * Collect information about browsers
+     * 
+     * @param string $sStr
+     * @param string $sIP
+     */    
+    
+    public function fModuleBrowsers($sStr, $sIP) {
+        $aSplittedString = explode(" ", $sStr);
+        for ($l = 0; $l < count((array)$aSplittedString); $l++) {
+            // Browsers names count
+            foreach ($this->aPatternBrowsers as $sBrowserName => $sBrowserName) {
+                $sBrowserStringClean=str_replace("\"", "", trim($aSplittedString[$l]));
+                if (preg_match("/" . $sBrowserName . "/", $sBrowserStringClean)) {
+                    // Only browser name
+                    $this->fVariablesSet('module_browsers_names', $sBrowserName, $sIP);
+                    $this->fVariablesSet('module_browsers_versions', $sBrowserStringClean, $sIP);
+                }
+            }
+        }
+    }    
+    
     /**
      * Collect information about display resolutions
      * 
@@ -798,6 +842,8 @@ class cWebLogParser extends cWebLogCommon {
     public function fInsertToSQL() {
         $sQuery = "INSERT INTO
                    " . PHP_MWSLP_SQL_TABLE . " (
+                    `browsers_names`,
+                    `browsers_versions`,
                     `ip_uniq`,
                     `ip_top100`,
                     `search_sys`,
@@ -814,6 +860,8 @@ class cWebLogParser extends cWebLogCommon {
                     `social`,
                     `sdate`)
                 VALUES  (
+                    '0',
+                    '0',
                     '0',
                     '0',
                     '0',

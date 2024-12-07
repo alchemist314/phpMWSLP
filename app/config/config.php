@@ -1,8 +1,8 @@
 <?php
 
 ini_set("display_errors", 1);
-//ini_set("error_reporting", E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-ini_set("error_reporting", E_ERROR);
+ini_set("error_reporting", E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+//ini_set("error_reporting", E_ERROR);
 ini_set('memory_limit', '4096M');
 
 date_default_timezone_set("Europe/Moscow");

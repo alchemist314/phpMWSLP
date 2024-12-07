@@ -147,6 +147,8 @@ Now that the logs are done, you can setup the program:
        * The "0" thread will collect the following information:
          <br>(modules_core0)
           <ul>
+            <li>module_browsers_names // Browsers names</li>
+            <li>module_browsers_versions // Top 100 browsers versions</li>
             <li>module_ip_top_100 // Top 100 IP addresses</li>
             <li>module_ip_unique_count // Total number of unique IP addresses</li>
             <li>module_display_resolutions // Screen resolutions</li>
