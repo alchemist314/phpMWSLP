@@ -25,7 +25,7 @@
   SOFTWARE.
 
  */
- 
+
 namespace phpMWSLP;
 use phpMWSLP\app\classes\cWebLogChart;
 use phpMWSLP\app\classes\cWebLogCommon;
@@ -54,8 +54,8 @@ $oWebLogChart->fInit();
     		aStr=k.toString().split(',');
     		k.reverse();
     		k.slice(0, -1);
-        	k.unshift(aStr[0]);
-        	aNewArr.push(k);
+    		k.unshift(aStr[0]);
+    		aNewArr.push(k);
 	    });
 
 	</script>
@@ -73,13 +73,14 @@ $oWebLogChart->fInit();
             <?php print $oWebLogChart->fVariablesGet('html_form_checkbox_list'); ?>
             &nbsp;Data limit: <input type="text" value="<?php !isset($_REQUEST['frm_count_limit']) ? print '20':print $_REQUEST['frm_count_limit']; ?>" name="frm_count_limit" size="3" title="Count limit">
             &nbsp;Chart limit: <input type="text" value="<?php !isset($_REQUEST['frm_chart_limit']) ? print '5':print $_REQUEST['frm_chart_limit']; ?>" name="frm_chart_limit" size="3" title="Chart limit">
+            <br><input type="checkbox" name="frm_sma_enable" id="frm_sma_enable" <?php print $oWebLogChart->fVariablesGet('html_form_sma_checkbox'); ?>> Enable SMA: <input type="text" value="<?php !isset($_REQUEST['frm_sma_count']) ? print '7':print $_REQUEST['frm_sma_count']; ?>" name="frm_sma_count" id="frm_sma_count" size="3" title="Simple moving average count">
             <input type="button" value="OK" name="frm_submit" onclick="fFormSubmit()">
-            
+
         </form>
 
         <?php print $oWebLogChart->fVariablesGet('html_div_module_list'); ?>
-        
-        <script src="<?= PHP_MWSLP_HTTP ?>/js/action.js?210824"></script>       
+
+        <script src="<?= PHP_MWSLP_HTTP ?>/js/action.js?161224"></script>
         <script src="<?= PHP_MWSLP_HTTP ?>/js/d3.v5.min.js?19012023" charset="utf-8"></script>
         <script src="<?= PHP_MWSLP_HTTP ?>/js/c3.min.js?19012023"></script>
         <script type="text/javascript">
@@ -90,8 +91,8 @@ $oWebLogChart->fInit();
         <?php print $oWebLogChart->fVariablesGet('html_line_char'); ?>
         <?php print $oWebLogChart->fVariablesGet('html_bar_chart_legend_table'); ?>
         <?php print $oWebLogChart->fVariablesGet('html_bar_char'); ?>
-   
-  
+
+
       function fChangeData(val, prefix) {
         if (prefix=='line') {
 	    if (val.length>0) {
@@ -124,7 +125,3 @@ $oWebLogChart->fInit();
 
     </body>
 </html>
-
-
-
-

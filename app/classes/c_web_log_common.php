@@ -38,6 +38,8 @@ class cWebLogCommon {
     // Variables storage
     public $aVariables = [];
     public $aModulesArray = array(
+        'module_browsers_versions',
+        'module_browsers_names',
         'module_ip_unique_count',
         'module_ip_top_100',
         'module_search_engines',
