@@ -218,7 +218,7 @@ Also, instead of running `app/scripts/parse_to_file`, you can run each thread se
 ### Requirements
 
 
-* PHP >= 7.3
+* PHP >= 7.3 (8 is recommended)
 * PDO
 * SQLIte
 * MaxMind DB Reader
