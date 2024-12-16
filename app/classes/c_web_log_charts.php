@@ -64,9 +64,9 @@ class cWebLogChart extends cWebLogCommon {
         $vQuery = "SELECT *,
 			    strftime(\"%d.%m.%Y\", sdate, 'localtime') as sdate,
                             strftime(\"%Y-%m-%d\", sdate, 'localtime') as sqldate,
-                            strftime(\"%Y%m%d\", sdate, 'localtime') as datetonumber 
+                            strftime(\"%Y%m%d\", sdate, 'localtime') as datetonumber
                      FROM
-                            " . PHP_MWSLP_SQL_TABLE . " 
+                            " . PHP_MWSLP_SQL_TABLE . "
                 ORDER BY
                 sdate DESC";
         try {
@@ -101,7 +101,7 @@ class cWebLogChart extends cWebLogCommon {
                 if ($aRow['datetonumber'] == $_REQUEST['frm_date_stop_id']) {
                     $sStopSQLDate = ($aRow['datetonumber']);
                     $jBrowsersNames = $aRow['browsers_names'];
-                    $jBrowsersVersions = $aRow['browsers_versions'];                    
+                    $jBrowsersVersions = $aRow['browsers_versions'];
                     $jUniqIP = $aRow['ip_uniq'];
                     $jSearch = $aRow['search_sys'];
                     $jTraf = json_decode($aRow['10min_traffic']);
@@ -157,6 +157,10 @@ class cWebLogChart extends cWebLogCommon {
         }
         $this->fVariablesSet('html_form_checkbox_list', $sFormCheckBoxList);
 
+        if (preg_match("/on/", $_REQUEST['frm_sma_enable']) == true) {
+            $this->fVariablesSet('html_form_sma_checkbox', "checked");
+        }
+
         if ($_REQUEST['frm_date_stop_id'] < 1) {
             $_REQUEST['frm_date_stop_id'] = 9;
         }
@@ -187,7 +191,7 @@ class cWebLogChart extends cWebLogCommon {
 
         $aModulesAndArrays = array(
             'module_browsers_names' => &$aBrowsersNames,
-            'module_browsers_versions' => &$aBrowsersVersions,            
+            'module_browsers_versions' => &$aBrowsersVersions,
             'module_ip_unique_count' => &$aUniqIP,
             'module_ip_top_100' => &$aIP_top100,
             'module_search_engines' => &$aSearchSys,
@@ -207,7 +211,7 @@ class cWebLogChart extends cWebLogCommon {
 
         $aModulesAndJSONStrings = array(
             'module_browsers_names' => $jBrowsersNames,
-            'module_browsers_versions' => $jBrowsersVersions,            
+            'module_browsers_versions' => $jBrowsersVersions,
             'module_ip_top_100' => $jIP_top100,
             'module_search_engines' => $jSearch,
             'module_all_requests' => $jRequestTop100,
@@ -273,7 +277,7 @@ class cWebLogChart extends cWebLogCommon {
 
     /**
      * Generate html table
-     * 
+     *
      * @param string array $sModuleName
      * @param array $aResult
      * @return string
@@ -290,7 +294,7 @@ class cWebLogChart extends cWebLogCommon {
 
     /**
      * Generate line chart legend table
-     * 
+     *
      * @param string array $sModuleName
      * @param array $aResult
      * @param string $sChartPrefix
@@ -308,7 +312,7 @@ class cWebLogChart extends cWebLogCommon {
 
     /**
      * Generate javascript data for pie chart
-     * 
+     *
      * @param string array $sModuleName
      * @param string JSON $jResult
      * @param integer $sCutArray
@@ -344,7 +348,7 @@ class cWebLogChart extends cWebLogCommon {
 
     /**
      * Generate javascript data for line chart
-     * 
+     *
      * @param string array $sModuleName
      * @param array $aResult
      * @return string
@@ -394,7 +398,7 @@ class cWebLogChart extends cWebLogCommon {
         }
         $sLineChart .= "
                 },
-                
+
                 axis : {
                     x : {
                       //type : 'timeseries',
@@ -433,7 +437,7 @@ class cWebLogChart extends cWebLogCommon {
 
     /**
      * Generate javascript data for bar chart
-     * 
+     *
      * @param string array $sModuleName
      * @param array $aResult
      * @return string
@@ -478,11 +482,11 @@ class cWebLogChart extends cWebLogCommon {
                         ,
                 type: 'bar',
                 },
-                
+
                 bar: {
                   space: 0.01
                 },
-                
+
                 axis : {
                     x : {
                       //type : 'timeseries',
@@ -521,7 +525,7 @@ class cWebLogChart extends cWebLogCommon {
 
     /**
      * Prepare data for charts
-     * 
+     *
      * @param array $aDataArray
      * @param integer $sCutArray
      * @param string $sLegendName
