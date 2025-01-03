@@ -7,9 +7,11 @@
 
 # 1. Change path to directories: -----------------------------
 
-CONFIG_PATH="/var/www/html/git/phpMWSLP/app/scripts/config"
-APP_PATH="/var/www/html/git/phpMWSLP/app/scripts"
+APP_PATH="/var/www/html/git/phpMWSLP/app"
+CONFIG_PATH="${APP_PATH}/scripts/config"
 
+# Don't forget to change the path to log files folder
+LOG_FOLDER="/var/logs/12.2024"
 # ------------------------------------------------------------
 
 # 2. Modify list of dates: -----------------------------------
@@ -43,25 +45,25 @@ for date in $dates
 
 	echo "start date: $date"
 	echo "log_date=$date" > $CONFIG_PATH
-	echo "log_path=/dist/STAT/02.24" >> $CONFIG_PATH
+        echo "log_path=$LOG_FOLDER" >> $CONFIG_PATH    
 	echo "log_prefix=access.log" >> $CONFIG_PATH
-	echo "log_tmp=/var/www/html/git/web_stat_tmp/app/tmp" >> $CONFIG_PATH
-	echo "log_tmp_parts=/var/www/html/git/web_stat_tmp/app/tmp/parts" >> $CONFIG_PATH
+	echo "log_tmp="${APP_PATH}/tmp" >> $CONFIG_PATH
+	echo "log_tmp_parts="${APP_PATH}/tmp/parts" >> $CONFIG_PATH
 
 	# --------------------------------------------------------------------------------
 
-	echo "start 1_cat_two.sh"
-	/bin/bash $APP_PATH/1_cat_two.sh
-	echo "start 2_start_grep.sh"
-	/bin/bash $APP_PATH/2_start_grep.sh
+	echo "start 1_log_glue.sh"
+	/bin/bash $APP_PATH/scripts/1_log_glue.sh
+	echo "start 2_grep_date.sh"
+	/bin/bash $APP_PATH/scripts/2_grep_date.sh
 	echo "start 3_split_file.sh"
-	/bin/bash $APP_PATH/3_split_file.sh
+	/bin/bash $APP_PATH/scripts/3_split_file.sh
 	echo "start 4_first.sh"
-	/bin/bash $APP_PATH/4_first.sh
+	/bin/bash $APP_PATH/scripts/4_first.sh
 	echo "start 5_parse_core.sh"
-	/bin/bash $APP_PATH/5_parse_core.sh 2>/dev/null > /dev/null
+	/bin/bash $APP_PATH/scripts/5_parse_core.sh 2>/dev/null > /dev/null
 	echo "start 6_parse_to_file.sh"
-	/bin/bash $APP_PATH/6_parse_to_file.sh 2>/dev/null > /dev/null
+	/bin/bash $APP_PATH/scripts/6_parse_to_file.sh 2>/dev/null > /dev/null
 	echo "start while loop..."
 	
 	sWhileStop=0
@@ -71,7 +73,7 @@ for date in $dates
 	    PID2=`ps -aux | grep web_log_parse_to_file.php | grep -v 'grep web_log_parse_to_file.php'`
 	    if [ -z "$PID1" ] && [ -z "$PID2" ]; then
 		echo "start 7_merge.sh"
-		/bin/bash $APP_PATH/7_merge.sh 2>/dev/null > /dev/null
+		/bin/bash $APP_PATH/scripts/7_merge.sh 2>/dev/null > /dev/null
 		sWhileStop=$((sWhileStop + 1))
 	    else
 		echo "parser still work!"

@@ -283,13 +283,13 @@ class cWebLogChart extends cWebLogCommon {
      * @return string
      */
 
-    private function fTableGenerator($sModuleName, $aResult) {
-        $sTable = "<table align=\"center\">";
+    public function fTableGenerator($sModuleName, $aResult) {
+        $sTable="<div style=\"overflow:auto; height:200px; background-color:#efefef;\"><table align=\"center\">";
         foreach ($aResult as $sDate => $sValue) {
-            $sTable .= "<tr><td>" . $sDate . "</td><td>" . $sValue . "</td></tr>";
+            $sTable .="<tr><td><input type=\"checkbox\" id=\"".$sDate."\" onchange=\"fChangeData(this.id)\"></td><td>".$sDate."</td><td>".$sValue."</td></tr>\\\n";
         }
-        $sTable .= "</table>";
-        return "document.getElementById('" . $sModuleName . "_table').innerHTML='" . $sTable . "'\n";
+        $sTable .="</table></div>";
+        return "document.getElementById('".$sModuleName."_table').innerHTML='".$sTable."'\n";
     }
 
     /**

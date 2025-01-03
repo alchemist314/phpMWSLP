@@ -31,20 +31,29 @@
 
 include "web_log_parser_header.php";
 
+unset($sErrorMsg);
+
 // Get last SQL ID
 $sSQLID=$oWebLogParser->fGetLastSQL_ID();
-if (!empty($sSQLID)) {
-    // Get date by ID
-    $sDateByID=$oWebLogParser->fGetDateByID($sSQLID);
-    if ($sDateByID==$sDate) {
-	$sErrorMsg = "Error: check dates! \n";
-	$sErrorMsg .="Date from DB ($sDateByID) equal input date ($sDate)! \n";
-	print $sErrorMsg;
-	exit;
-    } else {
-	// Create first SQL row
-	$oWebLogParser->fInsertToSQL();
-    }
-} else {
+
+// Get date by ID
+$sDateByID=$oWebLogParser->fGetDateByID($sSQLID);
+
+if ($sDateByID==$sDate) {
+    $sErrorMsg = "Error: check dates! \n";
+    $sErrorMsg .="Date from DB ($sDateByID) equal input date ($sDate)! \n";
+    print $sErrorMsg;
+}
+
+// Get row by date
+$sSQLIDByDate=$oWebLogParser->fGetLastSQL_ID($oWebLogParser->fVariablesGet('date_sql_short'));
+
+if (!empty($sSQLIDByDate)) {
+    $sErrorMsg = "Error: check dates! \n";
+    $sErrorMsg .="Date already exist!(".$sDate.")! \n";
+    print $sErrorMsg;
+}
+
+if (empty($sErrorMsg)) {
     $oWebLogParser->fInsertToSQL();
 }

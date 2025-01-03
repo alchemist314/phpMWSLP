@@ -78,7 +78,7 @@ class cWebLogParser extends cWebLogCommon {
     // Using in method fModuleReferalLinks()
     // Which domain will be excluded from output
     public $aPatternExcludeDomains = [
-        "somedomain.toexclude"
+	PHP_MWSLP_DOMAIN_TO_EXLUDE
     ];
 
     // Using in method fModuleDeviceType()
@@ -341,7 +341,7 @@ class cWebLogParser extends cWebLogCommon {
                             switch ($sModules) {
                                 case 'module_browsers_names':
                                 case 'module_browsers_versions':
-                                    // Display resolutions
+                                    // Browser versions
                                     $aMethodToExecute['fModuleBrowsers'] = 1;
                                     break;
                                 case 'module_display_resolutions':
@@ -406,13 +406,12 @@ class cWebLogParser extends cWebLogCommon {
                                     $this->fModuleCitiesAndCountries($sIP);
                                     break;
                                 case 'fOnlineUsers10min':
-                                    $aDateTimeOld = $aDateTime;
-                                    $aDateTime = $this->fOnlineUsers10min($sStr, $sIP, $aDateTimeOld);
+                                    $aDateTime[] = $this->fOnlineUsers10min($sStr, $sIP);
                                     break;
-                            } // switch
-                        } // foreach
-                    } // validate IP
-                } // preg_match
+                            } // Switch
+                        } // Foreach
+                    } // Validate IP
+                } // Preg_match
                 $sCount++;
                 if ($this->fVariablesGet('show_module_counter')) {
                     print $sCount . " of " . $sWebLogCount . "\n";
@@ -433,8 +432,15 @@ class cWebLogParser extends cWebLogCommon {
                         break;
                     case 'module_10min_online_users_count':
                         $aPeriodEvery10Min = $this->fVariablesGet('10min_period');
+                        foreach ($aDateTime as $sKey => $aValTimeStamp) {
+                            foreach ($aValTimeStamp as $sIP_TimeStamp => $aCountTimeStamp) {
+                                foreach($aCountTimeStamp as $sIP_Number => $sIP_Count) {
+                                    $aDateTimeNew[$sIP_TimeStamp][$sIP_Number]=1;
+                                }
+                            }
+                        }
                         foreach ($aPeriodEvery10Min as $sKey => $aVal) {
-                            $aOnlineUsersPer10min[$sKey] = count((array)$aDateTime[$sKey]);
+                            $aOnlineUsersPer10min[$sKey] = count((array)$aDateTimeNew[$sKey]);
                         }
                         is_countable($aOnlineUsersPer10min) ? ksort($aOnlineUsersPer10min) : "";
                         $this->fVariablesUnset($sModules);
@@ -491,14 +497,14 @@ class cWebLogParser extends cWebLogCommon {
      */
     
     private function fModuleDisplayResolutions($aRequestArray, $sIP) {
-        $aDisplayCount = substr($aRequestArray[2], 1);
-        if (preg_match("#^\d{1,}\*\d{1,}\*\d{1,}$#", $aDisplayCount)) {
-            $this->fVariablesSet('module_display_resolutions', $aDisplayCount, $sIP);
+        $sDisplayCount = substr($aRequestArray[2], 1);
+        if (preg_match("#^\d{1,}\*\d{1,}\*\d{1,}$#", $sDisplayCount)) {
+            $this->fVariablesSet('module_display_resolutions', $sDisplayCount, $sIP);
         }
     }
     
     /**
-     * Collect information about refaral links
+     * Collect information about referal links
      * 
      * @param array $aRequestArray
      * @param string $sReferalFlag
@@ -741,14 +747,14 @@ class cWebLogParser extends cWebLogCommon {
     }
     
     /**
-     * Collect information about online users by 10 minutss period
+     * Collect information about online users by 10 minutes period
      * 
      * @param string $sStr
      * @param string $sIP
      * @param string $aDateTime
      * @return array
      */
-    private function fOnlineUsers10min($sStr, $sIP, $aDateTime) {
+    private function fOnlineUsers10min($sStr, $sIP) {
 
         preg_match_all("/\\[(.*?)\\]/", $sStr, $aTimeDateMatches);
         $sTimeDate = str_replace(array("[", "]"), "", $aTimeDateMatches[0][0]);

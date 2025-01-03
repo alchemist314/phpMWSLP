@@ -32,5 +32,7 @@ define('PHP_MWSLP_SHOW_LINE_COUNTER', false);
 define('PHP_MWSLP_URL_LENGTH', 100);
 // If true the log file will reading from gz archive
 define('PHP_MWSLP_LOG_IS_GZIP', true);
+// Exlude references from our domain for module 'exclude known'
+define('PHP_MWSLP_DOMAIN_TO_EXLUDE', 'yourdomain.name');
 
 
