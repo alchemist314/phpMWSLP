@@ -2,7 +2,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023-2024 Golovanov Grigoriy
+  Copyright (c) 2023-2025 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -74,6 +74,7 @@ $oWebLogChart->fInit();
             &nbsp;Data limit: <input type="text" value="<?php !isset($_REQUEST['frm_count_limit']) ? print '20':print $_REQUEST['frm_count_limit']; ?>" name="frm_count_limit" size="3" title="Count limit">
             &nbsp;Chart limit: <input type="text" value="<?php !isset($_REQUEST['frm_chart_limit']) ? print '5':print $_REQUEST['frm_chart_limit']; ?>" name="frm_chart_limit" size="3" title="Chart limit">
             <br><input type="checkbox" name="frm_sma_enable" id="frm_sma_enable" <?php print $oWebLogChart->fVariablesGet('html_form_sma_checkbox'); ?>> Enable SMA: <input type="text" value="<?php !isset($_REQUEST['frm_sma_count']) ? print '7':print $_REQUEST['frm_sma_count']; ?>" name="frm_sma_count" id="frm_sma_count" size="3" title="Simple moving average count">
+            <input type="checkbox" name="frm_subchart_enable" id="frm_subchart_enable" <?php print $oWebLogChart->fVariablesGet('html_form_subchart_checkbox'); ?>> Enable subchart
             <input type="button" value="OK" name="frm_submit" onclick="fFormSubmit()">
 
         </form>
@@ -121,6 +122,29 @@ $oWebLogChart->fInit();
     	    }
 	}
      }
+     function fTouchDataArray() {
+         <?php
+         if (($oWebLogChart->fVariablesGet('chart_name')=="Line") && 
+             ($oWebLogChart->fVariablesGet('module_name')!=="module_day_online_users_count") &&
+             ($oWebLogChart->fVariablesGet('module_name')!=="module_10min_online_users_count")) {
+            print "setTimeout(fChangeData(aArr[1][0], 'line'), 1);";
+         }
+         ?>
+     }
+
+    document.getElementById('frm_subchart_enable').addEventListener('change', function() {
+        var sSubChart = this.checked;
+        <?php 
+            if ($oWebLogChart->fVariablesGet('chart_name')=="Line") {
+                print $oWebLogChart->fVariablesGet('module_name')."_line.subchart.show(sSubChart);";
+            }
+            if ($oWebLogChart->fVariablesGet('chart_name')=="Bar") {
+                print $oWebLogChart->fVariablesGet('module_name')."_bar.subchart.show(sSubChart);";
+            }
+        ?>
+        });
+    
+    fTouchDataArray();     
         </script>
 
     </body>

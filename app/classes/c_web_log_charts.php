@@ -3,7 +3,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023-2024 Golovanov Grigoriy
+  Copyright (c) 2023-2025 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -104,7 +104,8 @@ class cWebLogChart extends cWebLogCommon {
                     $jBrowsersVersions = $aRow['browsers_versions'];
                     $jUniqIP = $aRow['ip_uniq'];
                     $jSearch = $aRow['search_sys'];
-                    $jTraf = json_decode($aRow['10min_traffic']);
+                    $jTraf = json_decode($aRow['10min_traffic'],true);
+                    krsort($jTraf);                    
                     $jOS = $aRow['os'];
                     $jCountries = $aRow['countries'];
                     $jCities = $aRow['cities'];
@@ -152,6 +153,7 @@ class cWebLogChart extends cWebLogCommon {
             unset($sCheckBoxCheckedFlag);
             if (preg_match("/on/", $_REQUEST[$aFrmChartChekBoxArray[$sChartName]]) == true) {
                 $aCheckBoxCheckedFlag[$sChartName] = "checked";
+                $this->fVariablesSet('chart_name', $sChartName);                
             }
             $sFormCheckBoxList .= "<input type='checkbox' id='".$aFrmChartChekBoxArray[$sChartName]."' name='" . $aFrmChartChekBoxArray[$sChartName] . "' title='" . $sFrmChartToolTip . "' " . $aCheckBoxCheckedFlag[$sChartName] . ">" . $sChartName . "\n";
         }
@@ -160,7 +162,10 @@ class cWebLogChart extends cWebLogCommon {
         if (preg_match("/on/", $_REQUEST['frm_sma_enable']) == true) {
             $this->fVariablesSet('html_form_sma_checkbox', "checked");
         }
-
+        if (preg_match("/on/", $_REQUEST['frm_subchart_enable']) == true) {
+            $this->fVariablesSet('html_form_subchart_checkbox', "checked");
+        }
+        
         if ($_REQUEST['frm_date_stop_id'] < 1) {
             $_REQUEST['frm_date_stop_id'] = 9;
         }
@@ -181,6 +186,7 @@ class cWebLogChart extends cWebLogCommon {
             $sDateToNumber = $DateToDateNumber[$sDate];
             if (($sDateToNumber >= $sStartSQLDate) && ($sDateToNumber <= $sStopSQLDate)) {
                 $aStrOnlineUsers = json_decode($jStr, true);
+                krsort($aStrOnlineUsers);                
                 foreach ($aStrOnlineUsers as $sTime => $sCount) {
                     $sHour = substr($sTime, 0, 2);
                     $sMinut = substr($sTime, 2, 2);
@@ -203,10 +209,10 @@ class cWebLogChart extends cWebLogCommon {
             'module_countries' => &$aCountries,
             'module_countriesISO' => &$aCountriesISO,
             'module_cities' => &$aCities,
-            'module_10min_online_users_count' => &$aOnlineUsers10minCount,
+            'module_10min_online_users_count' => &$aOnlineUsersCountFinal,
             'module_windows_version' => &$aWindowsVersions,
             'module_social_networks' => &$aSocial,
-            'module_day_online_users_count' => &$aOnlineUsersCountFinal
+            'module_day_online_users_count' => &$aOnlineUsers10minCount
         );
 
         $aModulesAndJSONStrings = array(
@@ -396,6 +402,15 @@ class cWebLogChart extends cWebLogCommon {
             }
             $sLineChartData .= $sEndString;
         }
+        if ($this->fVariablesGet('html_form_subchart_checkbox')=="checked") {
+            $sSubChartAddon = "
+                zoom: {
+            	    enabled: true,
+            	    nitianRange: [30,60]
+                },
+                subchart: { show:true }
+                    ";
+        }        
         $sLineChart .= "
                 },
 
@@ -417,13 +432,7 @@ class cWebLogChart extends cWebLogCommon {
                             }
                         },
                 },
-                /*
-                zoom: {
-            	    enabled: true,
-            	    nitianRange: [30,60]
-                },
-                subchart: { show:true }
-                */
+                ".$sSubChartAddon."
                 });
 
         function fMouseOverLine(e) {
@@ -478,13 +487,22 @@ class cWebLogChart extends cWebLogCommon {
             }
             $sBarChartData .= $sEndString;
         }
+        if ($this->fVariablesGet('html_form_subchart_checkbox')=="checked") {
+            $sSubChartAddon = "
+                zoom: {
+            	    enabled: true,
+            	    nitianRange: [30,60]
+                },
+                subchart: { show:true }
+                    ";
+        }        
         $sBarChart .= "
                         ,
                 type: 'bar',
                 },
 
                 bar: {
-                  space: 0.01
+                  //space: 0.01
                 },
 
                 axis : {
@@ -505,13 +523,7 @@ class cWebLogChart extends cWebLogCommon {
                             }
                         },
                 },
-                /*
-                zoom: {
-            	    enabled: true,
-            	    nitianRange: [30,60]
-                },
-                subchart: { show:true }
-                */
+                ".$sSubChartAddon."
                 });
 
         function fMouseOverBar(e) {
