@@ -45,6 +45,13 @@ class cWebLogChart extends cWebLogCommon {
             $_SESSION['frm_date_start_id'] = $_REQUEST['frm_date_start_id'];
         }
 
+        // Module name => name on a chart legend
+        $aModulesAndLegends = array(
+            'module_ip_unique_count' => "unique IP count",
+            'module_10min_online_users_count' => "users_count",
+            'module_day_online_users_count' => "online_users_count"
+        );
+        
         foreach ($this->aModulesArray as $sModuleName) {
             if ($sModuleName == $_REQUEST['frm_modules']) {
                 $sFormDivModuleList .= "<div id='" . $sModuleName . "_pie'></div>\n";
@@ -71,7 +78,7 @@ class cWebLogChart extends cWebLogCommon {
                 sdate DESC";
         try {
             $oResult = $this->oPDO->query($vQuery);
-
+            $l=0;
             foreach ($oResult->fetchAll() as $aRow) {
 
                 if (($aRow['datetonumber'] >= $_REQUEST['frm_date_start_id']) &&
@@ -80,6 +87,7 @@ class cWebLogChart extends cWebLogCommon {
                     $aBrowsersNames[$aRow['sdate']] = $aRow['browsers_names'];
                     $aBrowsersVersions[$aRow['sdate']] = $aRow['browsers_versions'];
                     $aUniqIP[$aRow['sdate']] = $aRow['ip_uniq'];
+                    $l>0 ? $sUniqIP .= ",".$aRow['ip_uniq'] : $sUniqIP .= $aRow['ip_uniq'];                    
                     $aRequest[$aRow['sdate']] = $aRow['query_top100'];
                     $aRequestExcludeKnown[$aRow['sdate']] = $aRow['request_exclude_known'];
                     $aSearchSys[$aRow['sdate']] = $aRow['search_sys'];
@@ -94,6 +102,7 @@ class cWebLogChart extends cWebLogCommon {
                     $aReferals[$aRow['sdate']] = $aRow['referal_top100'];
                     $aIP_top100[$aRow['sdate']] = $aRow['ip_top100'];
                     $DateToDateNumber[$aRow['sqldate']] = $aRow['datetonumber'];
+                    $l++;                    
                 }
                 if ($aRow['datetonumber'] == $_REQUEST['frm_date_start_id']) {
                     $sStartSQLDate = ($aRow['datetonumber']);
@@ -105,7 +114,7 @@ class cWebLogChart extends cWebLogCommon {
                     $jUniqIP = $aRow['ip_uniq'];
                     $jSearch = $aRow['search_sys'];
                     $jTraf = json_decode($aRow['10min_traffic'],true);
-                    krsort($jTraf);                    
+                    is_countable($jTraf) ? krsort($jTraf) : "";
                     $jOS = $aRow['os'];
                     $jCountries = $aRow['countries'];
                     $jCities = $aRow['cities'];
@@ -133,7 +142,9 @@ class cWebLogChart extends cWebLogCommon {
         } catch (PDOException $e) {
             print "Error: " . $e->getMessage() . "\n";
         }
-
+        
+        $jUniqIP = json_encode([$aModulesAndLegends['module_ip_unique_count']=>$sUniqIP]);        
+        
         $this->fVariablesSet('html_form_select_date_start_id', $sFormDateStartID);
         $this->fVariablesSet('html_form_select_date_stop_id', $sFormDateID);
 
@@ -186,6 +197,7 @@ class cWebLogChart extends cWebLogCommon {
             $sDateToNumber = $DateToDateNumber[$sDate];
             if (($sDateToNumber >= $sStartSQLDate) && ($sDateToNumber <= $sStopSQLDate)) {
                 $aStrOnlineUsers = json_decode($jStr, true);
+                is_countable($aStrOnlineUsers) ? krsort($aStrOnlineUsers) : "";
                 krsort($aStrOnlineUsers);                
                 foreach ($aStrOnlineUsers as $sTime => $sCount) {
                     $sHour = substr($sTime, 0, 2);
@@ -218,6 +230,7 @@ class cWebLogChart extends cWebLogCommon {
         $aModulesAndJSONStrings = array(
             'module_browsers_names' => $jBrowsersNames,
             'module_browsers_versions' => $jBrowsersVersions,
+            'module_ip_unique_count' => $jUniqIP,            
             'module_ip_top_100' => $jIP_top100,
             'module_search_engines' => $jSearch,
             'module_all_requests' => $jRequestTop100,
@@ -237,12 +250,6 @@ class cWebLogChart extends cWebLogCommon {
             'module_ip_unique_count' => 1000,
             'module_ip_top_100' => 100,
             'module_day_online_users_count' => 10000
-        );
-
-        $aModulesAndLegends = array(
-            'module_ip_unique_count' => "unique IP count",
-            'module_10min_online_users_count' => "count",
-            'module_day_online_users_count' => "online users count"
         );
 
         foreach ($aModulesAndArrays as $sModuleName => $aDataArray) {
@@ -308,7 +315,12 @@ class cWebLogChart extends cWebLogCommon {
      */
     private function fLineChartLegendTable($sModuleName, $aResult, $sChartPrefix='') {
         $sTable="<div style=\"overflow:auto; height:200px; background-color:#efefef;\"><table align=\"center\">";
-        foreach ($aResult as $sName => $sValue) {
+        if ($sModuleName!=="module_ip_unique_count") {
+            foreach ($aResult as $sName => $sValue) {
+                $sTable .="<tr><td><input type=\"checkbox\" id=\"".$sChartPrefix."_".$sName."\" onchange=\"fChangeData(this.id, \'".$sChartPrefix."\')\"></td><td>".$sName."</td><td>".$sValue."</td></tr>\\\n";
+            }
+        } else {
+            $sName = array_key_first($aResult);
             $sTable .="<tr><td><input type=\"checkbox\" id=\"".$sChartPrefix."_".$sName."\" onchange=\"fChangeData(this.id, \'".$sChartPrefix."\')\"></td><td>".$sName."</td><td>".$sValue."</td></tr>\\\n";
         }
         $sTable .="</table></div>";
