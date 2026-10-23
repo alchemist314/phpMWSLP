@@ -3,7 +3,7 @@
 /*
   MIT License
 
-  Copyright (c) 2023-2025 Golovanov Grigoriy
+  Copyright (c) 2023-2026 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
@@ -163,7 +163,9 @@ class cWebLogParser extends cWebLogCommon {
     function __construct($sDate) {
         $this->fPDO();
         $this->oDateTime=new DateTime();
-        $this->oGeoDBreader = new Reader(PHP_MWSLP_GEO_DB);
+		if (!PHP_MWSLP_GEO_DISABLED) {
+        	$this->oGeoDBreader = new Reader(PHP_MWSLP_GEO_DB);
+		}
         if (strlen($sDate) > 0) {
             $this->fVariablesSet('date', $sDate);
             $this->fDatePrepare($sDate);
