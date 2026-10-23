@@ -4,7 +4,7 @@
 /**
  * MIT License
 
-  Copyright (c) 2023 Golovanov Grigoriy
+  Copyright (c) 2023-2026 Golovanov Grigoriy
   Contact e-mail: magentrum@gmail.com
 
 
