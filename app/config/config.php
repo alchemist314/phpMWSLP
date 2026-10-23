@@ -34,5 +34,6 @@ define('PHP_MWSLP_URL_LENGTH', 100);
 define('PHP_MWSLP_LOG_IS_GZIP', true);
 // Exlude references from our domain for module 'exclude known'
 define('PHP_MWSLP_DOMAIN_TO_EXLUDE', 'yourdomain.name');
-
+// Disable Geo module
+define('PHP_MWSLP_GEO_DISABLED', true);
 
