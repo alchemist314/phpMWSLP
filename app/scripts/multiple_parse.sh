@@ -47,8 +47,8 @@ for date in $dates
 	echo "log_date=$date" > $CONFIG_PATH
         echo "log_path=$LOG_FOLDER" >> $CONFIG_PATH    
 	echo "log_prefix=access.log" >> $CONFIG_PATH
-	echo "log_tmp="${APP_PATH}/tmp" >> $CONFIG_PATH
-	echo "log_tmp_parts="${APP_PATH}/tmp/parts" >> $CONFIG_PATH
+	echo "log_tmp=${APP_PATH}/tmp" >> $CONFIG_PATH
+	echo "log_tmp_parts=${APP_PATH}/tmp/parts" >> $CONFIG_PATH
 
 	# --------------------------------------------------------------------------------
 
